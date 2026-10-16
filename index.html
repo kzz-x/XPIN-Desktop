@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XPIN-Desktop · 差点桌面 Cinematic UI Motion Engine</title>
+  <link rel="stylesheet" href="./src/skin/macos.css">
+  <style>
+    /* Studio IDE Dark Shell */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0F1115;
+      color: #E2E8F0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Studio Header */
+    .studio-header {
+      height: 44px;
+      background: #181B22;
+      border-bottom: 1px solid #282E3B;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 50;
+    }
+
+    .studio-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .studio-badge {
+      background: #2563EB;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .studio-title {
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+
+    .studio-header-center {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: #94A3B8;
+    }
+
+    .status-pill {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ADE80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .studio-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-header {
+      background: #282E3B;
+      color: #E2E8F0;
+      border: 1px solid #3B4252;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-header:hover {
+      background: #3B4252;
+      border-color: #4B5563;
+    }
+
+    .btn-header.primary {
+      background: #2563EB;
+      border-color: #3B82F6;
+      color: #FFFFFF;
+    }
+
+    .btn-header.primary:hover {
+      background: #1D4ED8;
+    }
+
+    /* Main Workspace Layout: 3 Columns */
+    .studio-workspace {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Left Sidebar: Assets & Shot Director */
+    .sidebar-left {
+      width: 280px;
+      background: #14171E;
+      border-right: 1px solid #232936;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid #232936;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #64748B;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .shot-list-item {
+      padding: 8px 10px;
+      background: #1C2029;
+      border: 1px solid #282E3B;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.15s;
+    }
+
+    .shot-list-item:hover {
+      background: #232834;
+      border-color: #3B82F6;
+    }
+
+    .shot-list-item.active {
+      background: #1E293B;
+      border-color: #3B82F6;
+      color: #60A5FA;
+      font-weight: 700;
+    }
+
+    .shot-time-badge {
+      font-size: 10px;
+      background: #0F172A;
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #94A3B8;
+      font-family: monospace;
+    }
+
+    /* Center Stage Viewport */
+    .stage-outer-wrapper {
+      flex: 1;
+      background: #0B0D11;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #xpin-stage-container {
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      border-radius: 4px;
+    }
+
+    /* Right Sidebar: Inspector */
+    .sidebar-right {
+      width: 320px;
+      background: #14171E;
+      border-left: 1px solid #232936;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+      margin-bottom: 5px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      background: #1C2029;
+      border: 1px solid #2B3242;
+      border-radius: 6px;
+      padding: 7px 10px;
+      color: #F8FAFC;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: #3B82F6;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    /* Bottom Timeline Controller */
+    .studio-timeline-panel {
+      height: 110px;
+      background: #14171E;
+      border-top: 1px solid #232936;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+    }
+
+    .timeline-transport-bar {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #232936;
+      font-size: 12px;
+    }
+
+    .transport-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-transport {
+      background: #232834;
+      border: 1px solid #333B4D;
+      color: #E2E8F0;
+      padding: 4px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-transport:hover {
+      background: #333B4D;
+    }
+
+    .timecode-display {
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #38BDF8;
+      letter-spacing: 0.5px;
+    }
+
+    .timeline-track-area {
+      flex: 1;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .timeline-markers-bar {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #64748B;
+      font-family: monospace;
+      margin-bottom: 6px;
+    }
+
+    .timeline-slider {
+      width: 100%;
+      -webkit-appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: #282E3B;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .timeline-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #38BDF8;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.5);
+      cursor: ew-resize;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Studio Header -->
+  <header class="studio-header">
+    <div class="studio-brand">
+      <div class="studio-badge">XPIN-DESKTOP</div>
+      <div class="studio-title">Cinematic UI Motion Engine</div>
+      <div class="status-pill">macOS Skin V0.1 · Active</div>
+    </div>
+
+    <div class="studio-header-center">
+      <span>分辨率: 1920 × 1080</span>
+      <span>|</span>
+      <span>帧率: 24 FPS</span>
+      <span>|</span>
+      <span>当前镜头: <strong id="current-shot-badge" style="color: #60A5FA;">全景 Establishing</strong></span>
+    </div>
+
+    <div class="studio-actions">
+      <button class="btn-header" id="btn-export-png">📸 截取当前帧</button>
+      <button class="btn-header" id="btn-export-json">💾 导出场景 JSON</button>
+      <button class="btn-header primary" id="btn-export-html">📦 打包独立 HTML</button>
+    </div>
+  </header>
+
+  <!-- Main 3-Column Studio Workspace -->
+  <div class="studio-workspace">
+
+    <!-- Left Sidebar: Shot Director & Components -->
+    <aside class="sidebar-left">
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>🎬 摄影机分镜镜头 (Shots)</span>
+          <span style="font-size: 10px; color: #38BDF8;">5 镜</span>
+        </div>
+        <div class="shot-list">
+          <div class="shot-list-item active" data-shot-id="shot-1" data-start="0.0">
+            <span>01. 全景 Establishing</span>
+            <span class="shot-time-badge">0.0s - 2.5s</span>
+          </div>
+          <div class="shot-list-item" data-shot-id="shot-2" data-start="2.5">
+            <span>02. 中景 Finder双击</span>
+            <span class="shot-time-badge">2.5s - 4.8s</span>
+          </div>
+          <div class="shot-list-item" data-shot-id="shot-3" data-start="4.8">
+            <span>03. 特写 芯片微距</span>
+            <span class="shot-time-badge">4.8s - 8.5s</span>
+          </div>
+          <div class="shot-list-item" data-shot-id="shot-4" data-start="8.5">
+            <span>04. 转场 金句气泡</span>
+            <span class="shot-time-badge">8.5s - 10.8s</span>
+          </div>
+          <div class="shot-list-item" data-shot-id="shot-5" data-start="10.8">
+            <span>05. 收束 桌面全景</span>
+            <span class="shot-time-badge">10.8s - 12.0s</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>🖼️ 视觉参考截图映射</span>
+          <span style="font-size: 10px; color: #4ADE80;">已校准</span>
+        </div>
+        <div style="font-size: 12px; color: #94A3B8; line-height: 1.6;">
+          <p>• <strong>Ref-01</strong>: 浏览器卡片视口</p>
+          <p>• <strong>Ref-02</strong>: 弧形圆盘章节导航</p>
+          <p>• <strong>Ref-03</strong>: 浮雕金句气泡 & 3D图标</p>
+          <p>• <strong>Ref-04</strong>: macOS 桌面 6 大标志组件</p>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>💡 快捷键说明</span>
+        </div>
+        <div style="font-size: 11px; color: #64748B; line-height: 1.8;">
+          <p><kbd style="background:#1E293B; padding:2px 5px; border-radius:3px;">空格 Space</kbd> : 播放 / 暂停</p>
+          <p><kbd style="background:#1E293B; padding:2px 5px; border-radius:3px;">方向键 ← / →</kbd> : 逐帧步进 (1帧)</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center Stage: 16:9 Viewport -->
+    <main class="stage-outer-wrapper" id="stage-outer-wrapper">
+      <div id="xpin-stage-container"></div>
+    </main>
+
+    <!-- Right Sidebar: Inspector -->
+    <aside class="sidebar-right">
+      <div class="sidebar-section">
+        <div class="sidebar-title">⚙️ 属性检查器 (Inspector)</div>
+
+        <div class="form-group">
+          <label>主窗口大标题</label>
+          <input class="form-input" id="prop-master-title" value="硬件部" />
+        </div>
+
+        <div class="form-group">
+          <label>副标题 / 徽章</label>
+          <input class="form-input" id="prop-master-subtitle" value="X.PIN · IOS Core" />
+        </div>
+
+        <div class="form-group">
+          <label>艺术字体名称</label>
+          <input class="form-input" id="prop-art-font" value="标小智无界黑" />
+        </div>
+
+        <div class="form-group">
+          <label>常规字体名称</label>
+          <input class="form-input" id="prop-body-font" value="苹方UI-简" />
+        </div>
+
+        <div class="form-group">
+          <label>底部搜索框文案</label>
+          <input class="form-input" id="prop-search-placeholder" value="差评硬件部新视觉" />
+        </div>
+
+        <div class="form-group">
+          <label>芯片聚焦型号</label>
+          <input class="form-input" id="prop-chip-name" value="Apple A18 Pro" />
+        </div>
+
+        <div class="form-group">
+          <label>芯片技术规格标注</label>
+          <input class="form-input" id="prop-chip-spec" value="台积电 3nm N3P · 6核 GPU · 16核 NPU" />
+        </div>
+
+        <div class="form-group">
+          <label>金句标题 (Ref-03)</label>
+          <input class="form-input" id="prop-quote-title" value="金句" />
+        </div>
+
+        <div class="form-group">
+          <label>金句内容文案</label>
+          <textarea class="form-textarea" id="prop-quote-body">对话框样式，就是对话框样式，也是一种对话框的样式。</textarea>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">🎬 离线视频渲染命令</div>
+        <div style="font-size: 11px; color: #94A3B8; background: #0B0D11; padding: 8px 10px; border-radius: 6px; font-family: monospace; line-height: 1.5; border: 1px solid #232936;">
+          python scripts/render_video.py --output demo.mp4 --fps 24
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Bottom Timeline Track & Controls -->
+  <footer class="studio-timeline-panel">
+    <div class="timeline-transport-bar">
+      <div class="transport-controls">
+        <button class="btn-transport" id="btn-step-back">◀ 逐帧</button>
+        <button class="btn-transport" id="btn-play-pause">▶ 播放</button>
+        <button class="btn-transport" id="btn-step-fwd">逐帧 ▶</button>
+      </div>
+
+      <div class="timecode-display" id="timeline-timecode">
+        00:00:00:00 / 00:00:12:00
+      </div>
+
+      <div style="color: #64748B; font-size: 11px;">
+        确定性时间线 · 任意帧独立求值
+      </div>
+    </div>
+
+    <div class="timeline-track-area">
+      <div class="timeline-markers-bar">
+        <span>0.0s (桌面全景)</span>
+        <span>2.5s (Finder双击)</span>
+        <span>4.8s (芯片特写)</span>
+        <span>8.5s (金句卡片)</span>
+        <span>12.0s (完结)</span>
+      </div>
+      <input type="range" class="timeline-slider" id="timeline-scrubber" min="0" max="12.0" step="0.041666" value="0">
+    </div>
+  </footer>
+
+  <!-- App Bootstrap -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "xpin-desktop",
+  "version": "0.1.0",
+  "description": "Cinematic UI Motion Engine · Agent-native UI animation and video system",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "render:video": "python scripts/render_video.py"
+  },
+  "keywords": [
+    "motion-graphics",
+    "cinematic-ui",
+    "macos",
+    "video-generator",
+    "timeline",
+    "agent-ui"
+  ],
+  "author": "XPIN-Desktop Team",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
