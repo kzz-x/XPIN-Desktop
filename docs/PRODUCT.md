@@ -1,6 +1,6 @@
 # 产品设计｜XPIN-Desktop V0.2
 
-**更新：2026-10-15 · 状态：讨论确定的方向 + 待实现需求**
+**更新：2026-10-16 · 状态：方向确定，用户截图待提供，正式工程未开发**
 
 ## 一句话定位
 
@@ -44,14 +44,20 @@
 
 | 家族 | 代表内容 | 优先度 |
 | --- | --- | --- |
-| macOS | Finder、Preview、Safari、Dock、通知 | 首期 |
-| Windows | Explorer、Photos、Taskbar、Settings | 首期基础 |
+| macOS | Finder、Preview、Safari、Dock、通知 | **首期唯一视觉基准；优先 Finder / Preview** |
+| Windows | Explorer、Photos、Taskbar、Settings | macOS 验收后，以可替换 Skin 扩展 |
 | Node Canvas | 图文节点、端口、连线、分组与卡片 | 第二阶段 |
 | iOS | Home、Photos、Settings、Notification / Control Center | 后续 |
 | Android | 主屏幕、相册、文件管理、通知面板及品牌变体 | 后续 |
 | Custom UI | 网页、终端、表格、FUI、概念科技面板 | 按场景扩展 |
 
 **系统 Skin、UI 组件和导演表现解耦**。不要为每个系统复制一套动作引擎。
+
+## 首期视觉来源（2026-10-16 已定）
+
+用户将提供**现有 macOS 风格视觉模板的截图**，只以截图作为视觉参考，由 Codex 用代码重新搭建可编辑 UI 组件；**不以 AE 工程或 AE 数据迁移作为输入/依赖**。截图尚未提供，视觉 Token 与关键帧对照需等待实际素材。详见 [macOS 视觉基准](MACOS-VISUAL-REFERENCE.md)。
+
+**开发顺序**：先 macOS 截图风格卡 → 关键帧对照 → 动态 Previs → 组件与语义动作 → 可编辑 HTML + MP4；后续系统再使用同一场景数据与行为引擎切换 Skin / 操作适配器。
 
 ## 典型用法
 
