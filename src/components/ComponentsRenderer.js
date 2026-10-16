@@ -453,6 +453,7 @@ export class StageRenderer {
               <button class="xpin-preview-btn" id="btn-zoom-out">－ 缩小</button>
               <button class="xpin-preview-btn" id="btn-zoom-reset">1:1</button>
               <button class="xpin-preview-btn" id="btn-zoom-fit">适应窗口</button>
+              <button class="xpin-preview-btn" id="btn-breakout-toggle" style="background: rgba(56, 189, 248, 0.15); color: #0284C7; font-weight: 700; border-color: rgba(56, 189, 248, 0.4);" title="脱框演变：将芯片脱离窗口变形为 3D 拓扑节点卡片">⚡ 脱框演变</button>
             </div>
             <span style="font-size: 11px; color: #8E8E93;" id="preview-zoom-indicator">缩放: 100%</span>
           </div>
@@ -788,6 +789,159 @@ export class StageRenderer {
           </div>
         </div>
 
+        <!-- =================================================================
+             Option 2: 3D Topology Node Network Stage (Window-to-Node Breakout)
+             ================================================================= -->
+        <div class="xpin-node-network-stage" id="xpin-node-network">
+          <!-- Connecting Glowing Bezier Wires SVG Layer -->
+          <svg class="xpin-topology-wires-svg" id="xpin-topology-wires" viewBox="0 0 1920 1080">
+            <defs>
+              <linearGradient id="wireGradCpu" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#51A7F9" stop-opacity="0.95" />
+              </linearGradient>
+              <linearGradient id="wireGradGpu" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#27C93F" stop-opacity="0.95" />
+              </linearGradient>
+              <linearGradient id="wireGradNpu" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#FFBD2E" stop-opacity="0.95" />
+              </linearGradient>
+            </defs>
+
+            <!-- CPU Connection (Port Left to CPU Node) -->
+            <path id="wire-bg-cpu" class="topology-wire-path-bg" d="M 840 560 C 760 560, 750 450, 710 450" />
+            <path id="wire-flow-cpu" class="topology-wire-path-flow" stroke="url(#wireGradCpu)" style="color: #51A7F9;" d="M 840 560 C 760 560, 750 450, 710 450" />
+
+            <!-- GPU Connection (Port Top-Right to GPU Node) -->
+            <path id="wire-bg-gpu" class="topology-wire-path-bg" d="M 1190 460 C 1260 460, 1260 310, 1330 310" />
+            <path id="wire-flow-gpu" class="topology-wire-path-flow" stroke="url(#wireGradGpu)" style="color: #27C93F;" d="M 1190 460 C 1260 460, 1260 310, 1330 310" />
+
+            <!-- NPU Connection (Port Bottom-Right to NPU Node) -->
+            <path id="wire-bg-npu" class="topology-wire-path-bg" d="M 1190 660 C 1260 660, 1260 670, 1330 670" />
+            <path id="wire-flow-npu" class="topology-wire-path-flow" stroke="url(#wireGradNpu)" style="color: #FFBD2E;" d="M 1190 660 C 1260 660, 1260 670, 1330 670" />
+          </svg>
+
+          <!-- Central Detached Chip Card (Elevated in 3D) -->
+          <div class="xpin-detached-chip-card" id="detached-chip-card">
+            <!-- Port anchors -->
+            <div class="xpin-node-port port-left" title="CPU 高速通道"></div>
+            <div class="xpin-node-port port-top-right" title="GPU 显存总线"></div>
+            <div class="xpin-node-port port-bottom-right" title="NPU 统一内存直连"></div>
+
+            <div class="xpin-chip-header">
+              <div class="xpin-chip-title-badge">
+                <div class="xpin-chip-pulse-dot"></div>
+                <div style="font-size: 16px; font-weight: 800; color: #FFFFFF;" id="detached-chip-title">Apple A18 Pro</div>
+              </div>
+              <div class="xpin-chip-card-tag" id="detached-chip-badge">SoC 核心枢纽</div>
+            </div>
+
+            <div class="xpin-chip-preview-box">
+              <img id="detached-chip-img" src="./assets/demo/logic_board_soc.jpg" alt="A18 Pro Die" />
+              <div class="xpin-chip-preview-grid"></div>
+              <div class="xpin-chip-crosshair"></div>
+            </div>
+
+            <div style="font-size: 13px; font-weight: 700; color: #38BDF8;" id="detached-chip-process">台积电 3nm N3P · 200亿晶体管</div>
+            <div style="font-size: 11px; color: #94A3B8; margin-top: 4px;" id="detached-chip-codename">代号: Tahiti Bionic · 主频 4.04GHz</div>
+
+            <div class="xpin-chip-meta-row">
+              <div class="xpin-chip-meta-item">
+                <span class="xpin-chip-meta-label">核心面积</span>
+                <span class="xpin-chip-meta-val" id="detached-chip-diesize">105.4 mm²</span>
+              </div>
+              <div class="xpin-chip-meta-item">
+                <span class="xpin-chip-meta-label">晶体管规模</span>
+                <span class="xpin-chip-meta-val" id="detached-chip-transistors">200 亿</span>
+              </div>
+              <div class="xpin-chip-meta-item">
+                <span class="xpin-chip-meta-label">最高主频</span>
+                <span class="xpin-chip-meta-val" id="detached-chip-clockspeed">4.04 GHz</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Satellite Node 1: CPU Architecture -->
+          <div class="xpin-topology-node" id="node-cpu">
+            <div class="node-port-ingress" style="background: #0284C7; border: 2px solid #38BDF8; box-shadow: 0 0 10px #38BDF8;"></div>
+            <div class="xpin-node-header">
+              <div class="xpin-node-icon-box" style="background: #007AFF;">⚡</div>
+              <div class="xpin-node-title-group">
+                <div class="xpin-node-title" id="node-cpu-title">6-Core CPU 架构</div>
+                <div class="xpin-node-subtitle" id="node-cpu-subtitle">2×性能核 4.04GHz + 4×能效核</div>
+              </div>
+              <div class="xpin-node-badge" style="background: rgba(0, 122, 255, 0.15); color: #007AFF;">CPU 集群</div>
+            </div>
+
+            <div class="xpin-node-metric-row">
+              <span class="xpin-node-metric-label" id="node-cpu-metric-label">单核 IPC 增幅</span>
+              <span class="xpin-node-metric-value" style="color: #007AFF;" id="node-cpu-metric-val">+18%</span>
+            </div>
+
+            <div class="xpin-node-bar-track">
+              <div class="xpin-node-bar-fill" id="node-cpu-bar" style="width: 88%; background: linear-gradient(90deg, #38BDF8, #007AFF); color: #007AFF;"></div>
+            </div>
+
+            <div class="xpin-node-desc" id="node-cpu-desc">
+              第二代微架构，L2 缓存翻倍至 16MB，高负载整机功耗稳控 4.2W 以内
+            </div>
+          </div>
+
+          <!-- Satellite Node 2: GPU Architecture -->
+          <div class="xpin-topology-node" id="node-gpu">
+            <div class="node-port-ingress" style="background: #16A34A; border: 2px solid #22C55E; box-shadow: 0 0 10px #22C55E;"></div>
+            <div class="xpin-node-header">
+              <div class="xpin-node-icon-box" style="background: #10B981;">🎮</div>
+              <div class="xpin-node-title-group">
+                <div class="xpin-node-title" id="node-gpu-title">6-Core Pro GPU</div>
+                <div class="xpin-node-subtitle" id="node-gpu-subtitle">桌面级架构 · 硬件光追引擎</div>
+              </div>
+              <div class="xpin-node-badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981;">GPU 渲染</div>
+            </div>
+
+            <div class="xpin-node-metric-row">
+              <span class="xpin-node-metric-label" id="node-gpu-metric-label">光追渲染速度</span>
+              <span class="xpin-node-metric-value" style="color: #10B981;" id="node-gpu-metric-val">2.0×</span>
+            </div>
+
+            <div class="xpin-node-bar-track">
+              <div class="xpin-node-bar-fill" id="node-gpu-bar" style="width: 94%; background: linear-gradient(90deg, #34D399, #10B981); color: #10B981;"></div>
+            </div>
+
+            <div class="xpin-node-desc" id="node-gpu-desc">
+              支持网格着色 (Mesh Shading) 与动态缓存，高画质光追帧率大幅跃升
+            </div>
+          </div>
+
+          <!-- Satellite Node 3: NPU & Memory Subsystem -->
+          <div class="xpin-topology-node" id="node-npu">
+            <div class="node-port-ingress" style="background: #D97706; border: 2px solid #F59E0B; box-shadow: 0 0 10px #F59E0B;"></div>
+            <div class="xpin-node-header">
+              <div class="xpin-node-icon-box" style="background: #F59E0B;">🧠</div>
+              <div class="xpin-node-title-group">
+                <div class="xpin-node-title" id="node-npu-title">16-Core NPU & 统一内存</div>
+                <div class="xpin-node-subtitle" id="node-npu-subtitle">35 TOPS 算力 · LPDDR5X-8533</div>
+              </div>
+              <div class="xpin-node-badge" style="background: rgba(245, 158, 11, 0.15); color: #F59E0B;">AI 引擎</div>
+            </div>
+
+            <div class="xpin-node-metric-row">
+              <span class="xpin-node-metric-label" id="node-npu-metric-label">端侧推理吞吐</span>
+              <span class="xpin-node-metric-value" style="color: #F59E0B;" id="node-npu-metric-val">35 TOPS</span>
+            </div>
+
+            <div class="xpin-node-bar-track">
+              <div class="xpin-node-bar-fill" id="node-npu-bar" style="width: 92%; background: linear-gradient(90deg, #FBBF24, #F59E0B); color: #F59E0B;"></div>
+            </div>
+
+            <div class="xpin-node-desc" id="node-npu-desc">
+              端侧大语言模型 Token 推理速度提升 2.8×，子系统内存带宽提升 17%
+            </div>
+          </div>
+        </div>
+
         <!-- Cursor & Pointer Performance -->
         <div class="xpin-click-ripple" id="xpin-click-ripple"></div>
         <div class="xpin-cursor" id="xpin-cursor">
@@ -956,6 +1110,70 @@ export class StageRenderer {
     this.dom.quoteBody = document.getElementById('quote-card-body');
     this.dom.chartBadge = document.getElementById('chart-badge-val');
     this.dom.audioDuration = document.getElementById('audio-duration-label');
+
+    // Option 2: 3D Topology Node Network bindings
+    this.dom.nodeNetwork = document.getElementById('xpin-node-network');
+    this.dom.detachedChipCard = document.getElementById('detached-chip-card');
+    this.dom.detachedChipImg = document.getElementById('detached-chip-img');
+    this.dom.detachedChipTitle = document.getElementById('detached-chip-title');
+    this.dom.detachedChipBadge = document.getElementById('detached-chip-badge');
+    this.dom.detachedChipProcess = document.getElementById('detached-chip-process');
+    this.dom.detachedChipCodename = document.getElementById('detached-chip-codename');
+    this.dom.detachedChipDieSize = document.getElementById('detached-chip-diesize');
+    this.dom.detachedChipTransistors = document.getElementById('detached-chip-transistors');
+    this.dom.detachedChipClockSpeed = document.getElementById('detached-chip-clockspeed');
+
+    this.dom.wireFlowCpu = document.getElementById('wire-flow-cpu');
+    this.dom.wireFlowGpu = document.getElementById('wire-flow-gpu');
+    this.dom.wireFlowNpu = document.getElementById('wire-flow-npu');
+
+    this.dom.nodeCpu = document.getElementById('node-cpu');
+    this.dom.nodeGpu = document.getElementById('node-gpu');
+    this.dom.nodeNpu = document.getElementById('node-npu');
+
+    this.dom.nodeCpuTitle = document.getElementById('node-cpu-title');
+    this.dom.nodeCpuSubtitle = document.getElementById('node-cpu-subtitle');
+    this.dom.nodeCpuMetricLabel = document.getElementById('node-cpu-metric-label');
+    this.dom.nodeCpuMetricVal = document.getElementById('node-cpu-metric-val');
+    this.dom.nodeCpuBar = document.getElementById('node-cpu-bar');
+    this.dom.nodeCpuDesc = document.getElementById('node-cpu-desc');
+
+    this.dom.nodeGpuTitle = document.getElementById('node-gpu-title');
+    this.dom.nodeGpuSubtitle = document.getElementById('node-gpu-subtitle');
+    this.dom.nodeGpuMetricLabel = document.getElementById('node-gpu-metric-label');
+    this.dom.nodeGpuMetricVal = document.getElementById('node-gpu-metric-val');
+    this.dom.nodeGpuBar = document.getElementById('node-gpu-bar');
+    this.dom.nodeGpuDesc = document.getElementById('node-gpu-desc');
+
+    this.dom.nodeNpuTitle = document.getElementById('node-npu-title');
+    this.dom.nodeNpuSubtitle = document.getElementById('node-npu-subtitle');
+    this.dom.nodeNpuMetricLabel = document.getElementById('node-npu-metric-label');
+    this.dom.nodeNpuMetricVal = document.getElementById('node-npu-metric-val');
+    this.dom.nodeNpuBar = document.getElementById('node-npu-bar');
+    this.dom.nodeNpuDesc = document.getElementById('node-npu-desc');
+    this.dom.btnBreakoutToggle = document.getElementById('btn-breakout-toggle');
+
+    // Attach interactive node clicks for deep architecture inspection
+    if (this.dom.nodeCpu) {
+      this.dom.nodeCpu.addEventListener('click', () => {
+        this.showToast('⚡ CPU 集群：2×高性能大核 (4.04GHz) + 4×高能效小核，IPC 提升 18%');
+      });
+    }
+    if (this.dom.nodeGpu) {
+      this.dom.nodeGpu.addEventListener('click', () => {
+        this.showToast('🎮 GPU 单元：6-Core Pro 架构，硬件加速光线追踪，Mesh Shading 着色');
+      });
+    }
+    if (this.dom.nodeNpu) {
+      this.dom.nodeNpu.addEventListener('click', () => {
+        this.showToast('🧠 神经网络引擎：16-Core NPU，35 TOPS 算力，统一内存直连 8533MT/s');
+      });
+    }
+    if (this.dom.detachedChipCard) {
+      this.dom.detachedChipCard.addEventListener('click', () => {
+        this.showToast('💎 Apple A18 Pro：台积电 3nm N3P 工艺，200 亿晶体管 SoC 总成');
+      });
+    }
   }
 
   showToast(message, durationMs = 2000) {
@@ -1071,10 +1289,120 @@ export class StageRenderer {
         // Chip Annotation
         this.dom.chipCallout.style.opacity = String(pw.annotationOpacity);
         this.dom.chipCallout.style.transform = `translateY(${(1 - pw.annotationOpacity) * 10}px)`;
+
+        // Dissolve Preview Window chrome (titlebar and toolbar) during breakout
+        const titlebar = this.dom.winPreview.querySelector('.xpin-window-titlebar');
+        const toolbar = this.dom.winPreview.querySelector('.xpin-preview-toolbar');
+        const chromeOp = pw.chromeOpacity !== undefined ? pw.chromeOpacity : 1.0;
+        if (titlebar) titlebar.style.opacity = String(chromeOp);
+        if (toolbar) toolbar.style.opacity = String(chromeOp);
+        if (chromeOp < 0.2) {
+          this.dom.winPreview.style.background = 'transparent';
+          this.dom.winPreview.style.boxShadow = 'none';
+          this.dom.winPreview.style.border = 'none';
+        } else {
+          this.dom.winPreview.style.background = '';
+          this.dom.winPreview.style.boxShadow = '';
+          this.dom.winPreview.style.border = '';
+        }
       }
     }
 
-    // 5. Quote Bubble Stage (Ref-03)
+    // 5. Option 2: 3D Topology Node Network (Window-to-Node Transformation)
+    const nw = sceneState.nodeNetworkState;
+    if (nw && nw.active && sceneState.visibility.nodeNetwork) {
+      this.dom.nodeNetwork.classList.add('active');
+      this.dom.nodeNetwork.style.opacity = '1';
+
+      // 5.1 Central Detached Chip Card
+      if (this.dom.detachedChipCard) {
+        this.dom.detachedChipCard.style.opacity = String(nw.breakoutProgress);
+        const zElevation = nw.chipCardElevation || 130;
+        const scaleVal = 0.9 + 0.15 * nw.breakoutProgress;
+        this.dom.detachedChipCard.style.transform = `translateZ(${zElevation}px) scale(${scaleVal.toFixed(3)})`;
+      }
+
+      // 5.2 Glowing Bezier Wires (draw outward from chip to satellite nodes)
+      const wireProgress = nw.wiresProgress || 0;
+      const wireDashOffset = (300 * (1 - wireProgress)).toFixed(1);
+      if (this.dom.wireFlowCpu) {
+        this.dom.wireFlowCpu.style.strokeDashoffset = wireDashOffset;
+        this.dom.wireFlowCpu.style.opacity = String(wireProgress);
+      }
+      if (this.dom.wireFlowGpu) {
+        this.dom.wireFlowGpu.style.strokeDashoffset = wireDashOffset;
+        this.dom.wireFlowGpu.style.opacity = String(wireProgress);
+      }
+      if (this.dom.wireFlowNpu) {
+        this.dom.wireFlowNpu.style.strokeDashoffset = wireDashOffset;
+        this.dom.wireFlowNpu.style.opacity = String(wireProgress);
+      }
+
+      // 5.3 Satellite Nodes (CPU, GPU, NPU)
+      const nodesData = nw.nodes || [];
+      if (this.dom.nodeCpu && nodesData[0]) {
+        this.dom.nodeCpu.style.opacity = String(nodesData[0].opacity);
+        this.dom.nodeCpu.style.transform = `translateZ(${nodesData[0].translateZ}px) scale(${nodesData[0].scale.toFixed(3)})`;
+      }
+      if (this.dom.nodeGpu && nodesData[1]) {
+        this.dom.nodeGpu.style.opacity = String(nodesData[1].opacity);
+        this.dom.nodeGpu.style.transform = `translateZ(${nodesData[1].translateZ}px) scale(${nodesData[1].scale.toFixed(3)})`;
+      }
+      if (this.dom.nodeNpu && nodesData[2]) {
+        this.dom.nodeNpu.style.opacity = String(nodesData[2].opacity);
+        this.dom.nodeNpu.style.transform = `translateZ(${nodesData[2].translateZ}px) scale(${nodesData[2].scale.toFixed(3)})`;
+      }
+    } else if (this.dom.nodeNetwork) {
+      this.dom.nodeNetwork.classList.remove('active');
+      this.dom.nodeNetwork.style.opacity = '0';
+      if (this.dom.detachedChipCard) this.dom.detachedChipCard.style.opacity = '0';
+      if (this.dom.nodeCpu) this.dom.nodeCpu.style.opacity = '0';
+      if (this.dom.nodeGpu) this.dom.nodeGpu.style.opacity = '0';
+      if (this.dom.nodeNpu) this.dom.nodeNpu.style.opacity = '0';
+    }
+
+    // Dynamic text & spec bindings for 3D Node Network
+    if (sceneState.data.nodeNetwork) {
+      const nnData = sceneState.data.nodeNetwork;
+      const cc = nnData.chipCard;
+      if (cc) {
+        if (this.dom.detachedChipTitle) this.dom.detachedChipTitle.textContent = cc.title || 'Apple A18 Pro';
+        if (this.dom.detachedChipBadge) this.dom.detachedChipBadge.textContent = cc.badge || 'SoC 核心枢纽';
+        if (this.dom.detachedChipProcess) this.dom.detachedChipProcess.textContent = cc.process || '台积电 3nm N3P · 200亿晶体管';
+        if (this.dom.detachedChipCodename) this.dom.detachedChipCodename.textContent = `代号: ${cc.codeName || 'Tahiti Bionic'} · 主频 ${cc.clockSpeed || '4.04GHz'}`;
+        if (this.dom.detachedChipDieSize) this.dom.detachedChipDieSize.textContent = cc.dieSize || '105.4 mm²';
+        if (this.dom.detachedChipTransistors) this.dom.detachedChipTransistors.textContent = cc.transistors || '200 亿';
+        if (this.dom.detachedChipClockSpeed) this.dom.detachedChipClockSpeed.textContent = cc.clockSpeed || '4.04 GHz';
+      }
+
+      const nodes = nnData.nodes || [];
+      if (nodes[0]) { // CPU
+        if (this.dom.nodeCpuTitle) this.dom.nodeCpuTitle.textContent = nodes[0].title;
+        if (this.dom.nodeCpuSubtitle) this.dom.nodeCpuSubtitle.textContent = nodes[0].subtitle;
+        if (this.dom.nodeCpuMetricLabel) this.dom.nodeCpuMetricLabel.textContent = nodes[0].specKey;
+        if (this.dom.nodeCpuMetricVal) this.dom.nodeCpuMetricVal.textContent = nodes[0].specVal;
+        if (this.dom.nodeCpuBar) this.dom.nodeCpuBar.style.width = `${nodes[0].barPercent}%`;
+        if (this.dom.nodeCpuDesc) this.dom.nodeCpuDesc.textContent = nodes[0].desc;
+      }
+      if (nodes[1]) { // GPU
+        if (this.dom.nodeGpuTitle) this.dom.nodeGpuTitle.textContent = nodes[1].title;
+        if (this.dom.nodeGpuSubtitle) this.dom.nodeGpuSubtitle.textContent = nodes[1].subtitle;
+        if (this.dom.nodeGpuMetricLabel) this.dom.nodeGpuMetricLabel.textContent = nodes[1].specKey;
+        if (this.dom.nodeGpuMetricVal) this.dom.nodeGpuMetricVal.textContent = nodes[1].specVal;
+        if (this.dom.nodeGpuBar) this.dom.nodeGpuBar.style.width = `${nodes[1].barPercent}%`;
+        if (this.dom.nodeGpuDesc) this.dom.nodeGpuDesc.textContent = nodes[1].desc;
+      }
+      if (nodes[2]) { // NPU
+        if (this.dom.nodeNpuTitle) this.dom.nodeNpuTitle.textContent = nodes[2].title;
+        if (this.dom.nodeNpuSubtitle) this.dom.nodeNpuSubtitle.textContent = nodes[2].subtitle;
+        if (this.dom.nodeNpuMetricLabel) this.dom.nodeNpuMetricLabel.textContent = nodes[2].specKey;
+        if (this.dom.nodeNpuMetricVal) this.dom.nodeNpuMetricVal.textContent = nodes[2].specVal;
+        if (this.dom.nodeNpuBar) this.dom.nodeNpuBar.style.width = `${nodes[2].barPercent}%`;
+        if (this.dom.nodeNpuDesc) this.dom.nodeNpuDesc.textContent = nodes[2].desc;
+      }
+    }
+
+    // 6. Quote Bubble Stage (Ref-03)
     const qs = sceneState.quoteState;
     if (qs.visible && sceneState.visibility.quoteBubble) {
       this.dom.quoteWrap.style.display = 'flex';
@@ -1090,7 +1418,7 @@ export class StageRenderer {
       }
     }
 
-    // 6. Update text bindings from scene data
+    // 7. Update text bindings from scene data
     if (this.dom.winHeadline) this.dom.winHeadline.textContent = sceneState.data.masterTitle;
     if (this.dom.winSubtitle) this.dom.winSubtitle.textContent = sceneState.data.masterSubtitle;
     if (this.dom.labelArtFont) this.dom.labelArtFont.textContent = `艺术字体: [ ${sceneState.data.artFontName} ]`;

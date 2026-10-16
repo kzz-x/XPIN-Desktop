@@ -554,12 +554,12 @@ ${macosCss}
             <span>03. 特写 A18 Pro 晶圆微距</span>
             <span class="shot-time-badge">04.8s</span>
           </div>
-          <div class="shot-list-item" data-start="8.5" data-shot-id="shot-4">
-            <span>04. 匹配转场 金句气泡与3D</span>
-            <span class="shot-time-badge">08.5s</span>
+          <div class="shot-list-item" data-start="7.5" data-shot-id="shot-4">
+            <span>04. 脱框演变 3D 拓扑节点网络</span>
+            <span class="shot-time-badge">07.5s</span>
           </div>
           <div class="shot-list-item" data-start="10.8" data-shot-id="shot-5">
-            <span>05. 收束 影视桌面总成</span>
+            <span>05. 收束 空间桌面全景</span>
             <span class="shot-time-badge">10.8s</span>
           </div>
         </div>
@@ -632,6 +632,53 @@ ${macosCss}
         <div class="form-group">
           <label>核心工艺与技术规格</label>
           <textarea class="form-textarea" id="prop-chip-spec">台积电 3nm N3P · 6核 CPU / 6核 GPU · 16核神经网络引擎 · 200亿晶体管</textarea>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>⚡ 芯片脱框演变与拓扑网络 (Node Network)</span>
+        </div>
+        <button class="btn-header" id="btn-trigger-breakout" style="width: 100%; justify-content: center; margin-bottom: 12px; background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); color: #38BDF8;">
+          ⚡ 触发芯片脱框演变
+        </button>
+        <div class="form-group">
+          <label>脱框核心卡片标题</label>
+          <input type="text" class="form-input" id="prop-node-chip-title" value="Apple A18 Pro" />
+        </div>
+        <div class="form-group">
+          <label>制程与晶体管规模</label>
+          <input type="text" class="form-input" id="prop-node-chip-process" value="台积电 3nm N3P · 200亿晶体管" />
+        </div>
+        <div class="form-group">
+          <label>内部研发代号</label>
+          <input type="text" class="form-input" id="prop-node-chip-codename" value="Tahiti Bionic" />
+        </div>
+        <div class="form-group">
+          <label>最高单核主频</label>
+          <input type="text" class="form-input" id="prop-node-chip-clock" value="4.04 GHz" />
+        </div>
+        <div style="border-top: 1px solid #2B3242; margin: 10px 0 8px 0;"></div>
+        <div class="form-group">
+          <label style="color: #51A7F9;">Node 1: CPU 集群名称与增幅</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" class="form-input" id="prop-node-cpu-title" value="6-Core CPU 架构" style="flex: 2;" />
+            <input type="text" class="form-input" id="prop-node-cpu-val" value="+18%" style="flex: 1;" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="color: #27C93F;">Node 2: GPU 单元名称与光追</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" class="form-input" id="prop-node-gpu-title" value="6-Core Pro GPU" style="flex: 2;" />
+            <input type="text" class="form-input" id="prop-node-gpu-val" value="2.0×" style="flex: 1;" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label style="color: #FFBD2E;">Node 3: NPU 引擎名称与算力</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="text" class="form-input" id="prop-node-npu-title" value="16-Core NPU & 统一内存" style="flex: 2;" />
+            <input type="text" class="form-input" id="prop-node-npu-val" value="35 TOPS" style="flex: 1;" />
+          </div>
         </div>
       </div>
 

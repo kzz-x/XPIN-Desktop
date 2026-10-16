@@ -49,21 +49,21 @@ export class CameraDirector {
         id: 'shot-3',
         name: '03. 特写 A18 Pro 空间微距',
         startTime: 4.8,
-        endTime: 8.5,
+        endTime: 7.5,
         type: 'smooth',
-        from: { x: -120, y: -30, zoom: 1.45, pitch: 11.0, yaw: 9.0,  roll: -1.0, blurDepth: 5 },
-        to:   { x: -140, y: -45, zoom: 1.68, pitch: 13.5, yaw: 12.0, roll: -1.5, blurDepth: 7 },
+        from: { x: -100, y: -25, zoom: 1.42, pitch: 10.0, yaw: 8.0, roll: -0.8, blurDepth: 4 },
+        to:   { x: -140, y: -45, zoom: 1.68, pitch: 13.5, yaw: 12.0, roll: -1.5, blurDepth: 6 },
         easing: Easing.cinematicSettle
       },
       {
         id: 'shot-4',
-        name: '04. 匹配转场 金句气泡与3D',
-        startTime: 8.5,
+        name: '04. 脱框演变 3D 拓扑节点网络',
+        startTime: 7.5,
         endTime: 10.8,
-        type: 'cut',
-        from: { x: 0, y: 20, zoom: 1.18, pitch: -6.0, yaw: 8.0, roll: 1.0, blurDepth: 4 },
-        to:   { x: 0, y: 0,  zoom: 1.08, pitch: -2.0, yaw: 2.0, roll: 0.5, blurDepth: 2 },
-        easing: Easing.easeInOutCubic
+        type: 'smooth',
+        from: { x: -80, y: -30, zoom: 1.42, pitch: 13.0, yaw: 10.0, roll: -1.0, blurDepth: 4 },
+        to:   { x: 30,  y: -10, zoom: 1.14, pitch: 14.5, yaw: -12.5, roll: 1.2, blurDepth: 1 },
+        easing: Easing.cinematicSettle
       },
       {
         id: 'shot-5',
@@ -71,8 +71,8 @@ export class CameraDirector {
         startTime: 10.8,
         endTime: 12.0,
         type: 'smooth',
-        from: { x: 0, y: 0, zoom: 1.08, pitch: 4.0, yaw: -3.0, roll: 0, blurDepth: 1 },
-        to:   { x: 0, y: 0, zoom: 1.0,  pitch: 0.0, yaw: 0.0,  roll: 0, blurDepth: 0 },
+        from: { x: 20, y: -5, zoom: 1.10, pitch: 8.0, yaw: -5.0, roll: 0.5, blurDepth: 1 },
+        to:   { x: 0,  y: 0,  zoom: 1.0,  pitch: 0.0, yaw: 0.0,  roll: 0, blurDepth: 0 },
         easing: Easing.easeOutQuart
       }
     ];

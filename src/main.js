@@ -671,6 +671,40 @@ export class StudioApp {
     this.bindInput('prop-quote-title', val => { this.scene.data.quoteTitle = val; });
     this.bindInput('prop-quote-body', val => { this.scene.data.quoteBody = val; });
 
+    // 5.1 Breakout Button Toggles (Preview Toolbar & Inspector)
+    const btnBreakout = document.getElementById('btn-breakout-toggle');
+    const btnBreakoutInspector = document.getElementById('btn-trigger-breakout');
+    const toggleBreakout = () => {
+      if (!this.scene.data.nodeNetwork) return;
+      const nn = this.scene.data.nodeNetwork;
+      nn.active = !nn.active;
+      if (btnBreakout) {
+        btnBreakout.innerHTML = nn.active ? '🔄 恢复窗口' : '⚡ 脱框演变';
+      }
+      if (btnBreakoutInspector) {
+        btnBreakoutInspector.innerHTML = nn.active ? '🔄 恢复预览窗口' : '⚡ 触发芯片脱框演变';
+      }
+      const state = this.scene.evalAt(this.timeline.currentTime);
+      this.stageRenderer.renderState(state, this.camera);
+      this.stageRenderer.showToast(nn.active 
+        ? '✨ 已触发：芯片脱离窗口，演变为 3D 拓扑架构节点卡片！'
+        : '已恢复：芯片收纳回 macOS 预览窗口');
+    };
+    if (btnBreakout) btnBreakout.addEventListener('click', toggleBreakout);
+    if (btnBreakoutInspector) btnBreakoutInspector.addEventListener('click', toggleBreakout);
+
+    // 5.2 3D Topology Node Network Inspector Inputs
+    this.bindInput('prop-node-chip-title', val => { if (this.scene.data.nodeNetwork) this.scene.data.nodeNetwork.chipCard.title = val; });
+    this.bindInput('prop-node-chip-process', val => { if (this.scene.data.nodeNetwork) this.scene.data.nodeNetwork.chipCard.process = val; });
+    this.bindInput('prop-node-chip-codename', val => { if (this.scene.data.nodeNetwork) this.scene.data.nodeNetwork.chipCard.codeName = val; });
+    this.bindInput('prop-node-chip-clock', val => { if (this.scene.data.nodeNetwork) this.scene.data.nodeNetwork.chipCard.clockSpeed = val; });
+    this.bindInput('prop-node-cpu-title', val => { if (this.scene.data.nodeNetwork?.nodes[0]) this.scene.data.nodeNetwork.nodes[0].title = val; });
+    this.bindInput('prop-node-cpu-val', val => { if (this.scene.data.nodeNetwork?.nodes[0]) this.scene.data.nodeNetwork.nodes[0].specVal = val; });
+    this.bindInput('prop-node-gpu-title', val => { if (this.scene.data.nodeNetwork?.nodes[1]) this.scene.data.nodeNetwork.nodes[1].title = val; });
+    this.bindInput('prop-node-gpu-val', val => { if (this.scene.data.nodeNetwork?.nodes[1]) this.scene.data.nodeNetwork.nodes[1].specVal = val; });
+    this.bindInput('prop-node-npu-title', val => { if (this.scene.data.nodeNetwork?.nodes[2]) this.scene.data.nodeNetwork.nodes[2].title = val; });
+    this.bindInput('prop-node-npu-val', val => { if (this.scene.data.nodeNetwork?.nodes[2]) this.scene.data.nodeNetwork.nodes[2].specVal = val; });
+
     // 6. 2.5D Spatial Camera 3D Sliders
     const sliderPitch = document.getElementById('cam-pitch');
     const sliderYaw = document.getElementById('cam-yaw');
