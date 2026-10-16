@@ -14,6 +14,7 @@ export class Scene {
 
     // Editable text & content properties
     this.data = {
+      theme: initialData.theme || 'light',
       masterTitle: initialData.masterTitle || '硬件部',
       masterSubtitle: initialData.masterSubtitle || 'X.PIN · IOS Core',
       artFontName: initialData.artFontName || '标小智无界黑',

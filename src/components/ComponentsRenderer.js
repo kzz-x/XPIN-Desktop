@@ -122,7 +122,10 @@ export class StageRenderer {
           </div>
         </div>
 
-        <div class="xpin-menubar-right">
+          <!-- Theme Toggle -->
+          <div class="xpin-menubar-status-icon" id="btn-menubar-theme" title="切换深色/浅色模式">
+            <span id="menubar-theme-icon">☀️</span>
+          </div>
           <!-- Battery -->
           <div class="xpin-menubar-status-icon" title="电池：100% 已充满">
             <span>􀛨 100%</span>
@@ -165,13 +168,13 @@ export class StageRenderer {
               <div style="font-size: 11px; color: #8E8E93;">XPIN-Lab-5G</div>
             </div>
           </div>
-          <div class="xpin-cc-tile" style="flex: 1; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 32px; height: 32px; background: #007AFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-              􀤆
+          <div class="xpin-cc-tile" id="btn-cc-darkmode" style="flex: 1; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <div style="width: 32px; height: 32px; background: #6366F1; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+              🌙
             </div>
             <div>
-              <div style="font-size: 13px; font-weight: 700;">蓝牙</div>
-              <div style="font-size: 11px; color: #8E8E93;">AirPods Max</div>
+              <div style="font-size: 13px; font-weight: 700;">深色外观</div>
+              <div style="font-size: 11px; color: #8E8E93;" id="cc-darkmode-status">未启用</div>
             </div>
           </div>
         </div>
@@ -1014,10 +1017,36 @@ export class StageRenderer {
    * Applies evaluated state deterministically to stage DOM (used by Cinematic Director)
    */
   renderState(sceneState, cameraDirector) {
-    // 1. Camera transform
+    // 1. Camera transform (with 2.5D Spatial Perspective)
     const camState = cameraDirector.evalAt(sceneState.time);
     const camCSS = cameraDirector.getCameraTransformCSS(camState);
     this.dom.cameraWorld.style.transform = camCSS;
+
+    // Apply Depth of Field blur classes on background
+    const blur = camState.blurDepth || 0;
+    this.container.classList.remove('dof-blur-low', 'dof-blur-mid', 'dof-blur-high');
+    if (blur >= 6) {
+      this.container.classList.add('dof-blur-high');
+    } else if (blur >= 3) {
+      this.container.classList.add('dof-blur-mid');
+    } else if (blur >= 1) {
+      this.container.classList.add('dof-blur-low');
+    }
+
+    // Apply Theme (Light vs Dark)
+    if (sceneState.data.theme === 'dark') {
+      this.container.classList.add('theme-dark');
+      const icon = document.getElementById('menubar-theme-icon');
+      if (icon) icon.textContent = '🌙';
+      const ccStatus = document.getElementById('cc-darkmode-status');
+      if (ccStatus) ccStatus.textContent = '已启用';
+    } else {
+      this.container.classList.remove('theme-dark');
+      const icon = document.getElementById('menubar-theme-icon');
+      if (icon) icon.textContent = '☀️';
+      const ccStatus = document.getElementById('cc-darkmode-status');
+      if (ccStatus) ccStatus.textContent = '未启用';
+    }
 
     // 2. Cursor position & click animation
     this.dom.cursor.style.transform = `translate(${sceneState.cursor.x}px, ${sceneState.cursor.y}px)`;

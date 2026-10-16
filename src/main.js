@@ -54,10 +54,32 @@ export class StudioApp {
       if (this.currentMode === 'cinematic') {
         this.stageRenderer.renderState(state, this.camera);
       } else {
-        // In desktop mode, camera stays at standard 1.0 framing
-        const staticCam = { x: 0, y: 0, zoom: 1.0, rotation: 0 };
-        const camCSS = this.camera.getCameraTransformCSS(staticCam);
-        this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+        // In desktop mode, if manual 3D is enabled, apply manual 3D camera
+        if (this.camera.manualOverride) {
+          const camCSS = this.camera.getCameraTransformCSS(this.camera.manualState);
+          this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+        } else {
+          // Standard static 1.0 framing with subtle spatial depth
+          const staticCam = { x: 0, y: 0, zoom: 1.0, pitch: 0, yaw: 0, roll: 0, blurDepth: 0 };
+          const camCSS = this.camera.getCameraTransformCSS(staticCam);
+          this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+        }
+
+        // Apply Theme (Light vs Dark)
+        if (state.data.theme === 'dark') {
+          this.stageRenderer.container.classList.add('theme-dark');
+          const icon = document.getElementById('menubar-theme-icon');
+          if (icon) icon.textContent = '🌙';
+          const ccStatus = document.getElementById('cc-darkmode-status');
+          if (ccStatus) ccStatus.textContent = '已启用';
+        } else {
+          this.stageRenderer.container.classList.remove('theme-dark');
+          const icon = document.getElementById('menubar-theme-icon');
+          if (icon) icon.textContent = '☀️';
+          const ccStatus = document.getElementById('cc-darkmode-status');
+          if (ccStatus) ccStatus.textContent = '未启用';
+        }
+
         // Audio progress continues
         const scrubberPercent = (state.audioProgress * 100).toFixed(1);
         this.stageRenderer.dom.audioPlayhead.style.left = `${scrubberPercent}%`;
@@ -431,6 +453,26 @@ export class StudioApp {
         }
       });
     }
+
+    // 11. Theme Toggles (Menubar, Control Center, Studio Header)
+    const toggleTheme = () => {
+      this.scene.data.theme = (this.scene.data.theme === 'dark' ? 'light' : 'dark');
+      const state = this.scene.evalAt(this.timeline.currentTime);
+      this.stageRenderer.renderState(state, this.camera);
+      const isDark = this.scene.data.theme === 'dark';
+      this.stageRenderer.showToast(`已切换为：macOS ${isDark ? '深色外观 (Dark Mode)' : '浅色外观 (Light Mode)'}`);
+      const studioThemeBtn = document.getElementById('btn-studio-theme-toggle');
+      if (studioThemeBtn) {
+        studioThemeBtn.innerHTML = isDark ? '🌙 深色外观' : '☀️ 浅色外观';
+      }
+    };
+
+    const btnTheme = document.getElementById('btn-menubar-theme');
+    const btnCCDark = document.getElementById('btn-cc-darkmode');
+    const btnStudioTheme = document.getElementById('btn-studio-theme-toggle');
+    if (btnTheme) btnTheme.addEventListener('click', toggleTheme);
+    if (btnCCDark) btnCCDark.addEventListener('click', toggleTheme);
+    if (btnStudioTheme) btnStudioTheme.addEventListener('click', toggleTheme);
   }
 
   toggleSpotlight(forceOpen) {
@@ -629,7 +671,63 @@ export class StudioApp {
     this.bindInput('prop-quote-title', val => { this.scene.data.quoteTitle = val; });
     this.bindInput('prop-quote-body', val => { this.scene.data.quoteBody = val; });
 
-    // 6. Export Buttons
+    // 6. 2.5D Spatial Camera 3D Sliders
+    const sliderPitch = document.getElementById('cam-pitch');
+    const sliderYaw = document.getElementById('cam-yaw');
+    const sliderZoom = document.getElementById('cam-zoom');
+    const chkManualCam = document.getElementById('cam-manual-override');
+    const btnResetCam = document.getElementById('btn-reset-cam');
+
+    const updateManualCam = () => {
+      if (!this.camera.manualOverride) return;
+      if (sliderPitch) this.camera.manualState.pitch = parseFloat(sliderPitch.value);
+      if (sliderYaw) this.camera.manualState.yaw = parseFloat(sliderYaw.value);
+      if (sliderZoom) this.camera.manualState.zoom = parseFloat(sliderZoom.value);
+
+      const lblPitch = document.getElementById('lbl-cam-pitch');
+      const lblYaw = document.getElementById('lbl-cam-yaw');
+      const lblZoom = document.getElementById('lbl-cam-zoom');
+      const lblZoomVal = document.getElementById('lbl-cam-zoom-val');
+      if (lblPitch) lblPitch.textContent = `${this.camera.manualState.pitch}°`;
+      if (lblYaw) lblYaw.textContent = `${this.camera.manualState.yaw}°`;
+      if (lblZoom) lblZoom.textContent = `${this.camera.manualState.zoom.toFixed(2)}x`;
+      if (lblZoomVal) lblZoomVal.textContent = `${this.camera.manualState.zoom.toFixed(2)}x`;
+
+      const camCSS = this.camera.getCameraTransformCSS(this.camera.manualState);
+      this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+    };
+
+    if (chkManualCam) {
+      chkManualCam.addEventListener('change', (e) => {
+        this.camera.manualOverride = e.target.checked;
+        if (this.camera.manualOverride) {
+          updateManualCam();
+          this.stageRenderer.showToast('🎥 已开启手动 3D 摄像机机位覆盖');
+        } else {
+          const state = this.scene.evalAt(this.timeline.currentTime);
+          this.stageRenderer.renderState(state, this.camera);
+          this.stageRenderer.showToast('已切回自动分镜机位');
+        }
+      });
+    }
+
+    if (sliderPitch) sliderPitch.addEventListener('input', updateManualCam);
+    if (sliderYaw) sliderYaw.addEventListener('input', updateManualCam);
+    if (sliderZoom) sliderZoom.addEventListener('input', updateManualCam);
+
+    if (btnResetCam) {
+      btnResetCam.addEventListener('click', () => {
+        if (sliderPitch) sliderPitch.value = 0;
+        if (sliderYaw) sliderYaw.value = 0;
+        if (sliderZoom) sliderZoom.value = 1.0;
+        if (chkManualCam) chkManualCam.checked = true;
+        this.camera.manualOverride = true;
+        updateManualCam();
+        this.stageRenderer.showToast('已重置为正面正视图 (0°, 0°)');
+      });
+    }
+
+    // 7. Export Buttons
     const btnExportJSON = document.getElementById('btn-export-json');
     if (btnExportJSON) {
       btnExportJSON.addEventListener('click', () => this.exportSceneJSON());

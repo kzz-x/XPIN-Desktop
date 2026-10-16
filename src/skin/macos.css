@@ -1706,3 +1706,252 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+/* ==========================================================================
+   2.5D Spatial Perspective & Layer Elevation (Apple Event Style 3D Space)
+   ========================================================================== */
+.xpin-stage-viewport {
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.xpin-camera-world {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.xpin-window {
+  transform-style: preserve-3d;
+  transform: translateZ(32px);
+  will-change: transform, box-shadow;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.xpin-window.active-window {
+  transform: translateZ(64px);
+}
+
+.xpin-window.is-dragging {
+  transform: translateZ(96px) scale(1.015);
+}
+
+.xpin-card {
+  transform-style: preserve-3d;
+  transform: translateZ(40px);
+}
+
+.xpin-desktop-icons {
+  transform-style: preserve-3d;
+  transform: translateZ(16px);
+}
+
+.xpin-bg-layer, .xpin-bg-radar-arc {
+  transform-style: preserve-3d;
+  transform: translateZ(-80px);
+  transition: filter 0.25s ease-out;
+}
+
+/* Depth of Field Blur on Background Elements */
+.dof-blur-low .xpin-bg-layer, .dof-blur-low .xpin-bg-radar-arc {
+  filter: blur(2px);
+}
+
+.dof-blur-mid .xpin-bg-layer, .dof-blur-mid .xpin-bg-radar-arc, .dof-blur-mid .xpin-desktop-icons {
+  filter: blur(4px);
+}
+
+.dof-blur-high .xpin-bg-layer, .dof-blur-high .xpin-bg-radar-arc, .dof-blur-high .xpin-desktop-icons {
+  filter: blur(8px);
+}
+
+/* ==========================================================================
+   macOS Dark Mode Token Theme (.theme-dark)
+   ========================================================================== */
+.theme-dark {
+  --xpin-canvas-bg: #0C0E14;
+  --xpin-grid-line: rgba(255, 255, 255, 0.045);
+  --xpin-dot-color: rgba(255, 255, 255, 0.12);
+
+  --xpin-surface-card: rgba(24, 28, 38, 0.94);
+  --xpin-surface-subtle: #12151E;
+  --xpin-surface-glass: rgba(20, 24, 34, 0.88);
+  --xpin-surface-sidebar: rgba(18, 21, 29, 0.94);
+  --xpin-surface-border: rgba(255, 255, 255, 0.10);
+  --xpin-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+  --xpin-shadow-window-active: 0 32px 84px -10px rgba(0, 0, 0, 0.75), 0 12px 32px -4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.14);
+  --xpin-shadow-window-inactive: 0 16px 44px -8px rgba(0, 0, 0, 0.6), 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --xpin-shadow-card: 0 20px 48px -8px rgba(0, 0, 0, 0.65), 0 4px 16px rgba(0, 0, 0, 0.35);
+  --xpin-shadow-dock: 0 24px 60px rgba(0, 0, 0, 0.75), 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  --xpin-text-main: #F3F4F6;
+  --xpin-text-sub: #9CA3AF;
+  --xpin-text-muted: #6B7280;
+}
+
+.theme-dark .xpin-menubar {
+  background: rgba(18, 20, 26, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-menubar-dropdown {
+  background: rgba(24, 27, 36, 0.96);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-dark .xpin-dropdown-item {
+  color: #F3F4F6;
+}
+
+.theme-dark .xpin-dropdown-divider {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .xpin-window-titlebar {
+  background: linear-gradient(to bottom, rgba(34, 38, 50, 0.98), rgba(24, 27, 36, 0.95));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-finder-toolbar,
+.theme-dark .xpin-finder-statusbar,
+.theme-dark .xpin-preview-toolbar {
+  background: #141720;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #9CA3AF;
+}
+
+.theme-dark .xpin-finder-sidebar {
+  background: rgba(18, 21, 29, 0.96);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-finder-content {
+  background: #181C26;
+}
+
+.theme-dark .xpin-file-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-dark .xpin-file-name {
+  color: #F3F4F6;
+}
+
+.theme-dark .xpin-finder-nav-btn,
+.theme-dark .xpin-preview-btn,
+.theme-dark .xpin-preview-select {
+  background: #222634;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #F3F4F6;
+}
+
+.theme-dark .xpin-finder-view-segmented {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-finder-view-seg.active {
+  background: #2D3345;
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-browser-window {
+  background: #181B24;
+}
+
+.theme-dark .xpin-browser-toolbar {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-browser-url-pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: #D1D5DB;
+}
+
+.theme-dark .xpin-browser-canvas-body {
+  background: #141720;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-browser-h1 {
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-browser-p {
+  color: #9CA3AF;
+}
+
+.theme-dark .xpin-notes-sidebar {
+  background: #141720;
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-notes-editor {
+  background: #181B26;
+  color: #E5E7EB;
+}
+
+.theme-dark .xpin-notes-editor h2 {
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-specs-table th {
+  background: #202432;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-specs-table td {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .xpin-master-window {
+  background: #181C26;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-dock-pill {
+  background: rgba(24, 28, 38, 0.82);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.theme-dark .xpin-spotlight-overlay {
+  background: rgba(24, 28, 38, 0.94);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.theme-dark .xpin-spotlight-input {
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-control-center-panel {
+  background: rgba(22, 26, 36, 0.94);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-dark .xpin-cc-tile {
+  background: #1D212E;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-desktop-icon-label {
+  color: #F3F4F6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.theme-dark .xpin-context-menu {
+  background: #222634;
+  color: #F3F4F6;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-context-menu-arrow {
+  background: #222634;
+}
+

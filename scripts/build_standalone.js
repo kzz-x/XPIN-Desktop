@@ -512,6 +512,7 @@ ${macosCss}
     </div>
 
     <div class="studio-actions">
+      <button class="btn-header" id="btn-studio-theme-toggle" title="一键切换深色/浅色模式">☀️ 浅色外观</button>
       <button class="btn-header" id="btn-export-json" title="保存场景配置为 JSON 文件">💾 导出工程 JSON</button>
       <button class="btn-header" id="btn-export-png" title="截取当前时间码超清关键帧">📸 关键帧截屏</button>
       <button class="btn-header primary" id="btn-export-html" title="打包独立零依赖 HTML">⚡ 打包单文件</button>
@@ -632,6 +633,42 @@ ${macosCss}
           <label>核心工艺与技术规格</label>
           <textarea class="form-textarea" id="prop-chip-spec">台积电 3nm N3P · 6核 CPU / 6核 GPU · 16核神经网络引擎 · 200亿晶体管</textarea>
         </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>🎥 2.5D 空间透视摄影机 (3D Tilt)</span>
+          <span style="font-size: 10px; color: #38BDF8;" id="lbl-cam-zoom">1.00x</span>
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #E2E8F0;">
+            <input type="checkbox" id="cam-manual-override" /> 启用手动 3D 摄像机覆盖
+          </label>
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; margin: 0;">俯仰角 (Pitch / RotateX)</label>
+            <span style="font-size: 11px; color: #38BDF8;" id="lbl-cam-pitch">0°</span>
+          </div>
+          <input type="range" class="form-input" id="cam-pitch" min="-20" max="25" step="0.5" value="0" style="padding: 2px;" />
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; margin: 0;">偏航角 (Yaw / RotateY)</label>
+            <span style="font-size: 11px; color: #38BDF8;" id="lbl-cam-yaw">0°</span>
+          </div>
+          <input type="range" class="form-input" id="cam-yaw" min="-25" max="25" step="0.5" value="0" style="padding: 2px;" />
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; margin: 0;">镜头缩放 (Camera Zoom)</label>
+            <span style="font-size: 11px; color: #38BDF8;" id="lbl-cam-zoom-val">1.0x</span>
+          </div>
+          <input type="range" class="form-input" id="cam-zoom" min="0.8" max="2.2" step="0.05" value="1.0" style="padding: 2px;" />
+        </div>
+        <button class="btn-header" id="btn-reset-cam" style="width: 100%; justify-content: center; margin-top: 4px;">
+          🔄 重置正面正视图 (0°, 0°)
+        </button>
       </div>
 
       <div class="sidebar-section">

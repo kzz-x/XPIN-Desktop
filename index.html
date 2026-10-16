@@ -1715,6 +1715,255 @@
   transform: translateX(-50%) translateY(0);
 }
 
+/* ==========================================================================
+   2.5D Spatial Perspective & Layer Elevation (Apple Event Style 3D Space)
+   ========================================================================== */
+.xpin-stage-viewport {
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.xpin-camera-world {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.xpin-window {
+  transform-style: preserve-3d;
+  transform: translateZ(32px);
+  will-change: transform, box-shadow;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.xpin-window.active-window {
+  transform: translateZ(64px);
+}
+
+.xpin-window.is-dragging {
+  transform: translateZ(96px) scale(1.015);
+}
+
+.xpin-card {
+  transform-style: preserve-3d;
+  transform: translateZ(40px);
+}
+
+.xpin-desktop-icons {
+  transform-style: preserve-3d;
+  transform: translateZ(16px);
+}
+
+.xpin-bg-layer, .xpin-bg-radar-arc {
+  transform-style: preserve-3d;
+  transform: translateZ(-80px);
+  transition: filter 0.25s ease-out;
+}
+
+/* Depth of Field Blur on Background Elements */
+.dof-blur-low .xpin-bg-layer, .dof-blur-low .xpin-bg-radar-arc {
+  filter: blur(2px);
+}
+
+.dof-blur-mid .xpin-bg-layer, .dof-blur-mid .xpin-bg-radar-arc, .dof-blur-mid .xpin-desktop-icons {
+  filter: blur(4px);
+}
+
+.dof-blur-high .xpin-bg-layer, .dof-blur-high .xpin-bg-radar-arc, .dof-blur-high .xpin-desktop-icons {
+  filter: blur(8px);
+}
+
+/* ==========================================================================
+   macOS Dark Mode Token Theme (.theme-dark)
+   ========================================================================== */
+.theme-dark {
+  --xpin-canvas-bg: #0C0E14;
+  --xpin-grid-line: rgba(255, 255, 255, 0.045);
+  --xpin-dot-color: rgba(255, 255, 255, 0.12);
+
+  --xpin-surface-card: rgba(24, 28, 38, 0.94);
+  --xpin-surface-subtle: #12151E;
+  --xpin-surface-glass: rgba(20, 24, 34, 0.88);
+  --xpin-surface-sidebar: rgba(18, 21, 29, 0.94);
+  --xpin-surface-border: rgba(255, 255, 255, 0.10);
+  --xpin-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+
+  --xpin-shadow-window-active: 0 32px 84px -10px rgba(0, 0, 0, 0.75), 0 12px 32px -4px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.14);
+  --xpin-shadow-window-inactive: 0 16px 44px -8px rgba(0, 0, 0, 0.6), 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.07);
+  --xpin-shadow-card: 0 20px 48px -8px rgba(0, 0, 0, 0.65), 0 4px 16px rgba(0, 0, 0, 0.35);
+  --xpin-shadow-dock: 0 24px 60px rgba(0, 0, 0, 0.75), 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  --xpin-text-main: #F3F4F6;
+  --xpin-text-sub: #9CA3AF;
+  --xpin-text-muted: #6B7280;
+}
+
+.theme-dark .xpin-menubar {
+  background: rgba(18, 20, 26, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-menubar-dropdown {
+  background: rgba(24, 27, 36, 0.96);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-dark .xpin-dropdown-item {
+  color: #F3F4F6;
+}
+
+.theme-dark .xpin-dropdown-divider {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .xpin-window-titlebar {
+  background: linear-gradient(to bottom, rgba(34, 38, 50, 0.98), rgba(24, 27, 36, 0.95));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-finder-toolbar,
+.theme-dark .xpin-finder-statusbar,
+.theme-dark .xpin-preview-toolbar {
+  background: #141720;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #9CA3AF;
+}
+
+.theme-dark .xpin-finder-sidebar {
+  background: rgba(18, 21, 29, 0.96);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-finder-content {
+  background: #181C26;
+}
+
+.theme-dark .xpin-file-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.theme-dark .xpin-file-name {
+  color: #F3F4F6;
+}
+
+.theme-dark .xpin-finder-nav-btn,
+.theme-dark .xpin-preview-btn,
+.theme-dark .xpin-preview-select {
+  background: #222634;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #F3F4F6;
+}
+
+.theme-dark .xpin-finder-view-segmented {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-finder-view-seg.active {
+  background: #2D3345;
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-browser-window {
+  background: #181B24;
+}
+
+.theme-dark .xpin-browser-toolbar {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-browser-url-pill {
+  background: rgba(255, 255, 255, 0.08);
+  color: #D1D5DB;
+}
+
+.theme-dark .xpin-browser-canvas-body {
+  background: #141720;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-browser-h1 {
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-browser-p {
+  color: #9CA3AF;
+}
+
+.theme-dark .xpin-notes-sidebar {
+  background: #141720;
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-notes-editor {
+  background: #181B26;
+  color: #E5E7EB;
+}
+
+.theme-dark .xpin-notes-editor h2 {
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-specs-table th {
+  background: #202432;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-specs-table td {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.theme-dark .xpin-master-window {
+  background: #181C26;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-dock-pill {
+  background: rgba(24, 28, 38, 0.82);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.theme-dark .xpin-spotlight-overlay {
+  background: rgba(24, 28, 38, 0.94);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.theme-dark .xpin-spotlight-input {
+  color: #FFFFFF;
+}
+
+.theme-dark .xpin-control-center-panel {
+  background: rgba(22, 26, 36, 0.94);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-dark .xpin-cc-tile {
+  background: #1D212E;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-dark .xpin-desktop-icon-label {
+  color: #F3F4F6;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.theme-dark .xpin-context-menu {
+  background: #222634;
+  color: #F3F4F6;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.theme-dark .xpin-context-menu-arrow {
+  background: #222634;
+}
+
+
   </style>
   <style>
     /* Studio IDE Dark Shell */
@@ -2151,6 +2400,7 @@
     </div>
 
     <div class="studio-actions">
+      <button class="btn-header" id="btn-studio-theme-toggle" title="一键切换深色/浅色模式">☀️ 浅色外观</button>
       <button class="btn-header" id="btn-export-json" title="保存场景配置为 JSON 文件">💾 导出工程 JSON</button>
       <button class="btn-header" id="btn-export-png" title="截取当前时间码超清关键帧">📸 关键帧截屏</button>
       <button class="btn-header primary" id="btn-export-html" title="打包独立零依赖 HTML">⚡ 打包单文件</button>
@@ -2271,6 +2521,42 @@
           <label>核心工艺与技术规格</label>
           <textarea class="form-textarea" id="prop-chip-spec">台积电 3nm N3P · 6核 CPU / 6核 GPU · 16核神经网络引擎 · 200亿晶体管</textarea>
         </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">
+          <span>🎥 2.5D 空间透视摄影机 (3D Tilt)</span>
+          <span style="font-size: 10px; color: #38BDF8;" id="lbl-cam-zoom">1.00x</span>
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; cursor: pointer; color: #E2E8F0;">
+            <input type="checkbox" id="cam-manual-override" /> 启用手动 3D 摄像机覆盖
+          </label>
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; margin: 0;">俯仰角 (Pitch / RotateX)</label>
+            <span style="font-size: 11px; color: #38BDF8;" id="lbl-cam-pitch">0°</span>
+          </div>
+          <input type="range" class="form-input" id="cam-pitch" min="-20" max="25" step="0.5" value="0" style="padding: 2px;" />
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; margin: 0;">偏航角 (Yaw / RotateY)</label>
+            <span style="font-size: 11px; color: #38BDF8;" id="lbl-cam-yaw">0°</span>
+          </div>
+          <input type="range" class="form-input" id="cam-yaw" min="-25" max="25" step="0.5" value="0" style="padding: 2px;" />
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <label style="font-size: 11px; margin: 0;">镜头缩放 (Camera Zoom)</label>
+            <span style="font-size: 11px; color: #38BDF8;" id="lbl-cam-zoom-val">1.0x</span>
+          </div>
+          <input type="range" class="form-input" id="cam-zoom" min="0.8" max="2.2" step="0.05" value="1.0" style="padding: 2px;" />
+        </div>
+        <button class="btn-header" id="btn-reset-cam" style="width: 100%; justify-content: center; margin-top: 4px;">
+          🔄 重置正面正视图 (0°, 0°)
+        </button>
       </div>
 
       <div class="sidebar-section">
@@ -2508,8 +2794,8 @@ class Timeline {
 
 // --- src/core/camera.js ---
 /**
- * XPIN-Desktop · Camera Director
- * Handles cinematic framing, camera dollies, zooms, tracking, and intentional shot cuts.
+ * XPIN-Desktop · 2.5D Spatial Perspective Camera Director
+ * Handles cinematic framing, camera dollies, zooms, 3D pitch/yaw tilts, tracking, and intentional shot cuts.
  */
 
 
@@ -2518,66 +2804,87 @@ class CameraDirector {
   constructor(options = {}) {
     this.viewportWidth = options.viewportWidth || 1920;
     this.viewportHeight = options.viewportHeight || 1080;
+    this.perspective = options.perspective || 1400;
+
+    // Manual camera override (for interactive desktop manipulation)
+    this.manualOverride = false;
+    this.manualState = {
+      x: 0,
+      y: 0,
+      zoom: 1.0,
+      pitch: 0,  // rotateX (-30 deg to +30 deg)
+      yaw: 0,    // rotateY (-30 deg to +30 deg)
+      roll: 0,   // rotateZ (-15 deg to +15 deg)
+      blurDepth: 0
+    };
     
-    // Default shots array for the cinematic demo
+    // Default 3D spatial shots array for the cinematic demo
     this.shots = options.shots || [
       {
         id: 'shot-1',
-        name: '全景 Establishing',
+        name: '01. 全景俯仰 Establishing',
         startTime: 0.0,
         endTime: 2.5,
-        type: 'smooth', // 'smooth' or 'cut'
-        from: { x: 0, y: 0, zoom: 1.0, rotation: 0 },
-        to:   { x: -20, y: 10, zoom: 1.05, rotation: 0 },
+        type: 'smooth',
+        from: { x: -30, y: 15, zoom: 1.02, pitch: 9.0, yaw: -8.0, roll: 0, blurDepth: 0 },
+        to:   { x: -10, y: 5,  zoom: 1.06, pitch: 6.0, yaw: -4.0, roll: 0, blurDepth: 0 },
         easing: Easing.easeInOutCubic
       },
       {
         id: 'shot-2',
-        name: '中景 Finder双击',
+        name: '02. 中景 访达文件双击',
         startTime: 2.5,
         endTime: 4.8,
         type: 'cut',
-        from: { x: 80, y: 0, zoom: 1.15, rotation: 0 },
-        to:   { x: 0, y: 10, zoom: 1.28, rotation: 0 },
+        from: { x: 60, y: 10, zoom: 1.18, pitch: 4.0, yaw: -3.0, roll: 0, blurDepth: 2 },
+        to:   { x: 10, y: 15, zoom: 1.28, pitch: 2.0, yaw: 0.0,  roll: 0, blurDepth: 3 },
         easing: Easing.easeInOutCubic
       },
       {
         id: 'shot-3',
-        name: '特写 芯片微距',
+        name: '03. 特写 A18 Pro 空间微距',
         startTime: 4.8,
         endTime: 8.5,
         type: 'smooth',
-        from: { x: 0, y: 10, zoom: 1.28, rotation: 0 },
-        to:   { x: 0, y: 15, zoom: 1.55, rotation: 0 },
+        from: { x: -120, y: -30, zoom: 1.45, pitch: 11.0, yaw: 9.0,  roll: -1.0, blurDepth: 5 },
+        to:   { x: -140, y: -45, zoom: 1.68, pitch: 13.5, yaw: 12.0, roll: -1.5, blurDepth: 7 },
         easing: Easing.cinematicSettle
       },
       {
         id: 'shot-4',
-        name: '匹配转场 金句气泡',
+        name: '04. 匹配转场 金句气泡与3D',
         startTime: 8.5,
         endTime: 10.8,
         type: 'cut',
-        from: { x: 0, y: 20, zoom: 1.18, rotation: 0 },
-        to:   { x: 0, y: 0, zoom: 1.10, rotation: 0 },
+        from: { x: 0, y: 20, zoom: 1.18, pitch: -6.0, yaw: 8.0, roll: 1.0, blurDepth: 4 },
+        to:   { x: 0, y: 0,  zoom: 1.08, pitch: -2.0, yaw: 2.0, roll: 0.5, blurDepth: 2 },
         easing: Easing.easeInOutCubic
       },
       {
         id: 'shot-5',
-        name: '收束 桌面全景',
+        name: '05. 收束 空间桌面全景',
         startTime: 10.8,
         endTime: 12.0,
         type: 'smooth',
-        from: { x: 0, y: 0, zoom: 1.10, rotation: 0 },
-        to:   { x: 0, y: 0, zoom: 1.0, rotation: 0 },
+        from: { x: 0, y: 0, zoom: 1.08, pitch: 4.0, yaw: -3.0, roll: 0, blurDepth: 1 },
+        to:   { x: 0, y: 0, zoom: 1.0,  pitch: 0.0, yaw: 0.0,  roll: 0, blurDepth: 0 },
         easing: Easing.easeOutQuart
       }
     ];
   }
 
   /**
-   * Deterministically calculates camera position and zoom at time t
+   * Deterministically calculates camera position, 3D angles and zoom at time t
    */
   evalAt(time) {
+    if (this.manualOverride) {
+      return {
+        ...this.manualState,
+        activeShot: { name: '手动 3D 机位 (Manual 3D)' },
+        progress: 1.0
+      };
+    }
+
     // Find active shot
     let activeShot = this.shots.find(s => time >= s.startTime && time < s.endTime);
     if (!activeShot) {
@@ -2601,28 +2908,40 @@ class CameraDirector {
     const x = lerp(activeShot.from.x, activeShot.to.x, progress);
     const y = lerp(activeShot.from.y, activeShot.to.y, progress);
     const zoom = lerp(activeShot.from.zoom, activeShot.to.zoom, progress);
-    const rotation = lerp(activeShot.from.rotation || 0, activeShot.to.rotation || 0, progress);
+    const pitch = lerp(activeShot.from.pitch || 0, activeShot.to.pitch || 0, progress);
+    const yaw = lerp(activeShot.from.yaw || 0, activeShot.to.yaw || 0, progress);
+    const roll = lerp(activeShot.from.roll || 0, activeShot.to.roll || 0, progress);
+    const blurDepth = lerp(activeShot.from.blurDepth || 0, activeShot.to.blurDepth || 0, progress);
 
     return {
       x,
       y,
       zoom,
-      rotation,
+      pitch,
+      yaw,
+      roll,
+      blurDepth,
       activeShot,
       progress
     };
   }
 
   /**
-   * Computes CSS transform matrix for camera world wrapper
+   * Computes CSS transform matrix for camera world wrapper with 3D perspective
    * Pivot is center of stage (960, 540)
    */
   getCameraTransformCSS(camState) {
     const cx = this.viewportWidth / 2;
     const cy = this.viewportHeight / 2;
-    
-    // translate to center, apply scale & pan, translate back
-    return `translate(${cx}px, ${cy}px) scale(${camState.zoom}) translate(${-cx + camState.x}px, ${-cy + camState.y}px) rotate(${camState.rotation}deg)`;
+    const pitch = (camState.pitch || 0).toFixed(2);
+    const yaw = (camState.yaw || 0).toFixed(2);
+    const roll = (camState.roll || 0).toFixed(2);
+    const zoom = (camState.zoom || 1.0).toFixed(3);
+    const x = (camState.x || 0).toFixed(1);
+    const y = (camState.y || 0).toFixed(1);
+    const perspective = this.perspective;
+
+    return `perspective(${perspective}px) translate3d(${cx}px, ${cy}px, 0px) scale(${zoom}) rotateX(${pitch}deg) rotateY(${yaw}deg) rotateZ(${roll}deg) translate3d(${-cx + Number(x)}px, ${-cy + Number(y)}px, 0px)`;
   }
 }
 
@@ -3208,6 +3527,7 @@ class Scene {
 
     // Editable text & content properties
     this.data = {
+      theme: initialData.theme || 'light',
       masterTitle: initialData.masterTitle || '硬件部',
       masterSubtitle: initialData.masterSubtitle || 'X.PIN · IOS Core',
       artFontName: initialData.artFontName || '标小智无界黑',
@@ -3585,7 +3905,10 @@ class StageRenderer {
           </div>
         </div>
 
-        <div class="xpin-menubar-right">
+          <!-- Theme Toggle -->
+          <div class="xpin-menubar-status-icon" id="btn-menubar-theme" title="切换深色/浅色模式">
+            <span id="menubar-theme-icon">☀️</span>
+          </div>
           <!-- Battery -->
           <div class="xpin-menubar-status-icon" title="电池：100% 已充满">
             <span>􀛨 100%</span>
@@ -3628,13 +3951,13 @@ class StageRenderer {
               <div style="font-size: 11px; color: #8E8E93;">XPIN-Lab-5G</div>
             </div>
           </div>
-          <div class="xpin-cc-tile" style="flex: 1; display: flex; align-items: center; gap: 10px;">
-            <div style="width: 32px; height: 32px; background: #007AFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
-              􀤆
+          <div class="xpin-cc-tile" id="btn-cc-darkmode" style="flex: 1; display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <div style="width: 32px; height: 32px; background: #6366F1; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+              🌙
             </div>
             <div>
-              <div style="font-size: 13px; font-weight: 700;">蓝牙</div>
-              <div style="font-size: 11px; color: #8E8E93;">AirPods Max</div>
+              <div style="font-size: 13px; font-weight: 700;">深色外观</div>
+              <div style="font-size: 11px; color: #8E8E93;" id="cc-darkmode-status">未启用</div>
             </div>
           </div>
         </div>
@@ -4477,10 +4800,36 @@ class StageRenderer {
    * Applies evaluated state deterministically to stage DOM (used by Cinematic Director)
    */
   renderState(sceneState, cameraDirector) {
-    // 1. Camera transform
+    // 1. Camera transform (with 2.5D Spatial Perspective)
     const camState = cameraDirector.evalAt(sceneState.time);
     const camCSS = cameraDirector.getCameraTransformCSS(camState);
     this.dom.cameraWorld.style.transform = camCSS;
+
+    // Apply Depth of Field blur classes on background
+    const blur = camState.blurDepth || 0;
+    this.container.classList.remove('dof-blur-low', 'dof-blur-mid', 'dof-blur-high');
+    if (blur >= 6) {
+      this.container.classList.add('dof-blur-high');
+    } else if (blur >= 3) {
+      this.container.classList.add('dof-blur-mid');
+    } else if (blur >= 1) {
+      this.container.classList.add('dof-blur-low');
+    }
+
+    // Apply Theme (Light vs Dark)
+    if (sceneState.data.theme === 'dark') {
+      this.container.classList.add('theme-dark');
+      const icon = document.getElementById('menubar-theme-icon');
+      if (icon) icon.textContent = '🌙';
+      const ccStatus = document.getElementById('cc-darkmode-status');
+      if (ccStatus) ccStatus.textContent = '已启用';
+    } else {
+      this.container.classList.remove('theme-dark');
+      const icon = document.getElementById('menubar-theme-icon');
+      if (icon) icon.textContent = '☀️';
+      const ccStatus = document.getElementById('cc-darkmode-status');
+      if (ccStatus) ccStatus.textContent = '未启用';
+    }
 
     // 2. Cursor position & click animation
     this.dom.cursor.style.transform = `translate(${sceneState.cursor.x}px, ${sceneState.cursor.y}px)`;
@@ -4597,10 +4946,32 @@ class StudioApp {
       if (this.currentMode === 'cinematic') {
         this.stageRenderer.renderState(state, this.camera);
       } else {
-        // In desktop mode, camera stays at standard 1.0 framing
-        const staticCam = { x: 0, y: 0, zoom: 1.0, rotation: 0 };
-        const camCSS = this.camera.getCameraTransformCSS(staticCam);
-        this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+        // In desktop mode, if manual 3D is enabled, apply manual 3D camera
+        if (this.camera.manualOverride) {
+          const camCSS = this.camera.getCameraTransformCSS(this.camera.manualState);
+          this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+        } else {
+          // Standard static 1.0 framing with subtle spatial depth
+          const staticCam = { x: 0, y: 0, zoom: 1.0, pitch: 0, yaw: 0, roll: 0, blurDepth: 0 };
+          const camCSS = this.camera.getCameraTransformCSS(staticCam);
+          this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+        }
+
+        // Apply Theme (Light vs Dark)
+        if (state.data.theme === 'dark') {
+          this.stageRenderer.container.classList.add('theme-dark');
+          const icon = document.getElementById('menubar-theme-icon');
+          if (icon) icon.textContent = '🌙';
+          const ccStatus = document.getElementById('cc-darkmode-status');
+          if (ccStatus) ccStatus.textContent = '已启用';
+        } else {
+          this.stageRenderer.container.classList.remove('theme-dark');
+          const icon = document.getElementById('menubar-theme-icon');
+          if (icon) icon.textContent = '☀️';
+          const ccStatus = document.getElementById('cc-darkmode-status');
+          if (ccStatus) ccStatus.textContent = '未启用';
+        }
+
         // Audio progress continues
         const scrubberPercent = (state.audioProgress * 100).toFixed(1);
         this.stageRenderer.dom.audioPlayhead.style.left = `${scrubberPercent}%`;
@@ -4974,6 +5345,26 @@ class StudioApp {
         }
       });
     }
+
+    // 11. Theme Toggles (Menubar, Control Center, Studio Header)
+    const toggleTheme = () => {
+      this.scene.data.theme = (this.scene.data.theme === 'dark' ? 'light' : 'dark');
+      const state = this.scene.evalAt(this.timeline.currentTime);
+      this.stageRenderer.renderState(state, this.camera);
+      const isDark = this.scene.data.theme === 'dark';
+      this.stageRenderer.showToast(`已切换为：macOS ${isDark ? '深色外观 (Dark Mode)' : '浅色外观 (Light Mode)'}`);
+      const studioThemeBtn = document.getElementById('btn-studio-theme-toggle');
+      if (studioThemeBtn) {
+        studioThemeBtn.innerHTML = isDark ? '🌙 深色外观' : '☀️ 浅色外观';
+      }
+    };
+
+    const btnTheme = document.getElementById('btn-menubar-theme');
+    const btnCCDark = document.getElementById('btn-cc-darkmode');
+    const btnStudioTheme = document.getElementById('btn-studio-theme-toggle');
+    if (btnTheme) btnTheme.addEventListener('click', toggleTheme);
+    if (btnCCDark) btnCCDark.addEventListener('click', toggleTheme);
+    if (btnStudioTheme) btnStudioTheme.addEventListener('click', toggleTheme);
   }
 
   toggleSpotlight(forceOpen) {
@@ -5172,7 +5563,63 @@ class StudioApp {
     this.bindInput('prop-quote-title', val => { this.scene.data.quoteTitle = val; });
     this.bindInput('prop-quote-body', val => { this.scene.data.quoteBody = val; });
 
-    // 6. Export Buttons
+    // 6. 2.5D Spatial Camera 3D Sliders
+    const sliderPitch = document.getElementById('cam-pitch');
+    const sliderYaw = document.getElementById('cam-yaw');
+    const sliderZoom = document.getElementById('cam-zoom');
+    const chkManualCam = document.getElementById('cam-manual-override');
+    const btnResetCam = document.getElementById('btn-reset-cam');
+
+    const updateManualCam = () => {
+      if (!this.camera.manualOverride) return;
+      if (sliderPitch) this.camera.manualState.pitch = parseFloat(sliderPitch.value);
+      if (sliderYaw) this.camera.manualState.yaw = parseFloat(sliderYaw.value);
+      if (sliderZoom) this.camera.manualState.zoom = parseFloat(sliderZoom.value);
+
+      const lblPitch = document.getElementById('lbl-cam-pitch');
+      const lblYaw = document.getElementById('lbl-cam-yaw');
+      const lblZoom = document.getElementById('lbl-cam-zoom');
+      const lblZoomVal = document.getElementById('lbl-cam-zoom-val');
+      if (lblPitch) lblPitch.textContent = `${this.camera.manualState.pitch}°`;
+      if (lblYaw) lblYaw.textContent = `${this.camera.manualState.yaw}°`;
+      if (lblZoom) lblZoom.textContent = `${this.camera.manualState.zoom.toFixed(2)}x`;
+      if (lblZoomVal) lblZoomVal.textContent = `${this.camera.manualState.zoom.toFixed(2)}x`;
+
+      const camCSS = this.camera.getCameraTransformCSS(this.camera.manualState);
+      this.stageRenderer.dom.cameraWorld.style.transform = camCSS;
+    };
+
+    if (chkManualCam) {
+      chkManualCam.addEventListener('change', (e) => {
+        this.camera.manualOverride = e.target.checked;
+        if (this.camera.manualOverride) {
+          updateManualCam();
+          this.stageRenderer.showToast('🎥 已开启手动 3D 摄像机机位覆盖');
+        } else {
+          const state = this.scene.evalAt(this.timeline.currentTime);
+          this.stageRenderer.renderState(state, this.camera);
+          this.stageRenderer.showToast('已切回自动分镜机位');
+        }
+      });
+    }
+
+    if (sliderPitch) sliderPitch.addEventListener('input', updateManualCam);
+    if (sliderYaw) sliderYaw.addEventListener('input', updateManualCam);
+    if (sliderZoom) sliderZoom.addEventListener('input', updateManualCam);
+
+    if (btnResetCam) {
+      btnResetCam.addEventListener('click', () => {
+        if (sliderPitch) sliderPitch.value = 0;
+        if (sliderYaw) sliderYaw.value = 0;
+        if (sliderZoom) sliderZoom.value = 1.0;
+        if (chkManualCam) chkManualCam.checked = true;
+        this.camera.manualOverride = true;
+        updateManualCam();
+        this.stageRenderer.showToast('已重置为正面正视图 (0°, 0°)');
+      });
+    }
+
+    // 7. Export Buttons
     const btnExportJSON = document.getElementById('btn-export-json');
     if (btnExportJSON) {
       btnExportJSON.addEventListener('click', () => this.exportSceneJSON());
