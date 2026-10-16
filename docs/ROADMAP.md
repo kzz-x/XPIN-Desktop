@@ -16,19 +16,25 @@
 - [x] 默认提供本地可编辑 HTML / 场景数据，按需导出 MP4；后期研究 AE / PR 接入，V0.1 不做原生插件。
 - [x] 收到截图后即刻启动工程落地，边构建组件边验证镜头链路。
 
-## 已有验证成果
-
 - [x] G0 截图视觉提取：4 张参考截图归档入 `references/macos/`，建立 `docs/MACOS-STYLE-CARD.md` 风格卡。
 - [x] 提取了精确的颜色体系（#F96257, #FDBC2C, #51A7F9, #2BC83D）、字体体系（标小智无界黑、苹方UI-简）、6 大标志性组件规约。
 - [x] 准备了高质量的硬件演示拆解素材（`assets/demo/`）。
+- [x] **V0.1 核心影视镜头跑通**：桌面 → 访达双击 → 预览打开 → 芯片微距特写 → 金句气泡与3D图标转换。
+- [x] **V0.2 完整 macOS 系统窗口逻辑重构**：
+  - 核心窗口管理器 (`src/core/windowManager.js`)：Z-Index 层级堆叠、标题栏平滑拖拽、窗口边缘/右下角自由缩放、交通灯三色按键（红关、黄最小化、绿最大化/还原）。
+  - 动态顶部菜单栏：跟随激活窗口同步当前应用名称，带真实下拉菜单（文件、编辑、显示、窗口、帮助）。
+  - 真实程序坞 (macOS Dock)：亚克力微光浮动胶囊、悬浮图标放大与回弹、运行指示灯 (Running dot)、点击唤醒与最小化收回。
+  - 聚焦搜索 (Spotlight Search)：`⌘+Space` 唤起全功能搜索框，支持键盘导航与应用/图纸即时跳转。
+  - 控制中心 (Control Center)：包含显示器亮度与系统音量真实滑杆、Wi-Fi/蓝牙磁贴、声学示波器母带卡片。
+  - 深度扩展内容资产：访达完整侧边栏与文件网格、多图纸预览器（A18 Pro 主板、iPhone 16 Pro 爆炸分解图、全景架构）、Safari 评测卡片 (Ref-01)、备忘录规格笔记、终端编译控制台。
+  - 双模式工作台：`🖥️ 交互操作系统模式` 与 `🎬 镜头导演模式` 一键无缝切换。
+  - 本地零依赖构建：`scripts/build_standalone.js` 自动打包单文件 `index.html`。
 
 ## 当前进行中与未完成
 
-- [x] 收到并分析**用户 macOS 视觉截图**，提取真实视觉 Token、部件与布局，建立样式对照基准。
-- [ ] 首批 macOS 关键帧 Styleframes 对照与动态 Previs。
-- [ ] Codex 实现正式模块化 Scene / Components / Actions / Camera / Timeline / Render 链路。
-- [ ] 可编辑 HTML / 自动视频导出在干净环境下通过验收。
-- [ ] Windows / 移动端 Skin、Node Canvas、AE/PR 集成。
+- [ ] 导出高清无损 4K 60fps 动态视频（Playwright + FFmpeg 自动化渲染流水线调优）。
+- [ ] 扩展 Windows / Fluent 设计语言 Skin 与组件适配。
+- [ ] AE / PR 剪辑导入与 MOGRT 资产生成。
 
 ## 接下来：从 G0 到 V0.1
 

@@ -1,40 +1,51 @@
 /* ==========================================================================
-   XPIN-Desktop · macOS Cinematic Skin Tokens & Component Styles
-   Visual Reference: references/macos/ (Ref 01 - 04)
-   Spec: docs/MACOS-STYLE-CARD.md
+   XPIN-Desktop · macOS Cinematic Skin Tokens & Advanced Window System Styles
+   Conforming to visual references: references/macos/ (Ref 01 - 04)
+   Authentic macOS Sonoma / Sequoia Window Architecture, Frosted Glass & Dock
    ========================================================================== */
 
 :root {
-  /* Canvas & Grid */
-  --xpin-canvas-bg: #ECEEF1;
-  --xpin-grid-line: rgba(0, 0, 0, 0.05);
-  --xpin-dot-color: rgba(0, 0, 0, 0.12);
+  /* Canvas & Backdrop */
+  --xpin-canvas-bg: #EAECEF;
+  --xpin-grid-line: rgba(0, 0, 0, 0.045);
+  --xpin-dot-color: rgba(0, 0, 0, 0.10);
 
-  /* Card Surfaces & Borders */
-  --xpin-surface-card: #FFFFFF;
+  /* Card Surfaces & Frosted Glass */
+  --xpin-surface-card: rgba(255, 255, 255, 0.96);
   --xpin-surface-subtle: #F6F7F9;
-  --xpin-surface-border: rgba(0, 0, 0, 0.07);
-  --xpin-shadow-card: 0 16px 40px -8px rgba(0, 0, 0, 0.07), 0 3px 12px -2px rgba(0, 0, 0, 0.04);
-  --xpin-shadow-popup: 0 10px 24px -4px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.05);
+  --xpin-surface-glass: rgba(255, 255, 255, 0.82);
+  --xpin-surface-sidebar: rgba(246, 247, 249, 0.88);
+  --xpin-surface-border: rgba(0, 0, 0, 0.08);
+  --xpin-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+  /* Elevation Shadows */
+  --xpin-shadow-window-active: 0 28px 72px -12px rgba(0, 0, 0, 0.22), 0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.07);
+  --xpin-shadow-window-inactive: 0 14px 36px -6px rgba(0, 0, 0, 0.12), 0 3px 10px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  --xpin-shadow-card: 0 16px 40px -8px rgba(0, 0, 0, 0.08), 0 3px 12px -2px rgba(0, 0, 0, 0.04);
+  --xpin-shadow-popup: 0 12px 30px -4px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.05);
+  --xpin-shadow-dock: 0 20px 50px rgba(0, 0, 0, 0.18), 0 2px 10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 
   /* Iconic Palette (Ref-04 (05)) */
-  --xpin-color-red: #F96257;       /* 珊瑚红 / 关闭钮 / 音频指针 */
-  --xpin-color-yellow: #FDBC2C;    /* 暖琥珀 / 最小化钮 / 来源箭头 */
-  --xpin-color-green: #2BC83D;     /* 亮苹果绿 / 最大化钮 / 选中绿 */
+  --xpin-color-red: #FF5F56;       /* 珊瑚红 / 关闭钮 / 音频指针 */
+  --xpin-color-yellow: #FFBD2E;    /* 暖琥珀 / 最小化钮 / 来源箭头 */
+  --xpin-color-green: #27C93F;     /* 亮苹果绿 / 最大化钮 / 选中绿 */
   --xpin-color-blue: #51A7F9;      /* 天青蓝 / 选框 / 鼠标 / 气泡 */
   --xpin-color-guide: #F59E0B;     /* 辅助线黄色 */
+  --xpin-accent-primary: #007AFF;  /* 系统原生蓝 */
 
   /* Typography */
   --xpin-font-display: '标小智无界黑', 'PingFang SC', 'SF Pro Display', -apple-system, 'Helvetica Neue', sans-serif;
   --xpin-font-body: '苹方-简', 'PingFang SC', 'SF Pro Text', -apple-system, sans-serif;
-  --xpin-font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  --xpin-font-mono: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
   --xpin-text-main: #1D1D1F;
   --xpin-text-sub: #6E6E73;
   --xpin-text-muted: #8E8E93;
 }
 
-/* Base resets inside the cinematic stage */
+/* ==========================================================================
+   Stage Viewport & Background Environment
+   ========================================================================== */
 .xpin-stage-viewport {
   position: relative;
   width: 100%;
@@ -47,14 +58,13 @@
   box-sizing: border-box;
 }
 
-/* Background Texture: Radar Arcs & Pixel Dots */
 .xpin-bg-layer {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 0;
   background-image: 
-    radial-gradient(circle, var(--xpin-dot-color) 1px, transparent 1px),
+    radial-gradient(circle, var(--xpin-dot-color) 1.2px, transparent 1.2px),
     linear-gradient(to right, var(--xpin-grid-line) 1px, transparent 1px),
     linear-gradient(to bottom, var(--xpin-grid-line) 1px, transparent 1px);
   background-size: 32px 32px, 128px 128px, 128px 128px;
@@ -65,84 +75,1027 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1300px;
-  height: 1300px;
+  width: 1380px;
+  height: 1380px;
   pointer-events: none;
-  opacity: 0.22;
+  opacity: 0.24;
 }
 
-/* macOS Top Menu Bar */
+/* ==========================================================================
+   Desktop Icons Layer
+   ========================================================================== */
+.xpin-desktop-icons {
+  position: absolute;
+  top: 48px;
+  right: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 5;
+}
+
+.xpin-desktop-icon-item {
+  width: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 6px 4px;
+  border-radius: 8px;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.xpin-desktop-icon-item:hover {
+  background: rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.xpin-desktop-icon-item.selected {
+  background: rgba(0, 122, 255, 0.18);
+  border: 1px solid rgba(0, 122, 255, 0.4);
+}
+
+.xpin-desktop-icon-item svg {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+.xpin-desktop-icon-label {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  color: #1D1D1F;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  line-height: 1.2;
+  word-break: break-all;
+}
+
+/* ==========================================================================
+   macOS Top Menu Bar (Live & Authentic)
+   ========================================================================== */
 .xpin-menubar {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 32px;
-  background: rgba(236, 238, 241, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--xpin-surface-border);
+  background: rgba(240, 242, 245, 0.85);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.4);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px;
+  padding: 0 14px;
   font-size: 13px;
   font-weight: 500;
-  z-index: 100;
+  z-index: 1000;
   box-sizing: border-box;
 }
 
 .xpin-menubar-left {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-
-.xpin-menubar-logo {
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
   gap: 4px;
 }
 
-.xpin-menubar-items {
-  display: flex;
-  gap: 16px;
-  color: var(--xpin-text-main);
-}
-
-.xpin-menubar-items span {
+.xpin-menubar-item {
+  position: relative;
+  padding: 4px 9px;
+  border-radius: 4px;
   cursor: pointer;
-  opacity: 0.9;
-  transition: opacity 0.15s;
+  color: var(--xpin-text-main);
+  transition: background 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.xpin-menubar-items span:hover {
-  opacity: 1;
+.xpin-menubar-item:hover, .xpin-menubar-item.active {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.xpin-menubar-item.app-name {
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .xpin-menubar-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   font-size: 12px;
   color: var(--xpin-text-main);
-  font-weight: 500;
 }
 
-/* Cinematic Camera Container */
-.xpin-camera-world {
+.xpin-menubar-status-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: background 0.12s;
+}
+
+.xpin-menubar-status-icon:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Dropdown Menu styling */
+.xpin-menubar-dropdown {
   position: absolute;
-  top: 0;
+  top: 30px;
   left: 0;
-  width: 1920px;
-  height: 1080px;
-  transform-origin: 0 0;
-  will-change: transform;
+  min-width: 210px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(25px) saturate(190%);
+  -webkit-backdrop-filter: blur(25px) saturate(190%);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 5px;
+  z-index: 1001;
+  display: none;
 }
 
-/* Common Card Base */
+.xpin-menubar-dropdown.open {
+  display: block;
+}
+
+.xpin-dropdown-item {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D1D1F;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.xpin-dropdown-item:hover {
+  background: #007AFF;
+  color: #FFFFFF;
+}
+
+.xpin-dropdown-item:hover .xpin-menu-shortcut {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.xpin-menu-shortcut {
+  font-size: 11px;
+  color: #8E8E93;
+}
+
+.xpin-dropdown-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 4px 6px;
+}
+
+/* ==========================================================================
+   Universal macOS Window Architecture (.xpin-window)
+   ========================================================================== */
+.xpin-window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--xpin-surface-card);
+  border-radius: 18px;
+  border: 1px solid var(--xpin-surface-border);
+  box-shadow: var(--xpin-shadow-window-inactive);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+}
+
+.xpin-window.active-window {
+  box-shadow: var(--xpin-shadow-window-active);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.xpin-window.is-dragging {
+  opacity: 0.96;
+  cursor: grabbing;
+}
+
+/* Window Titlebar */
+.xpin-window-titlebar {
+  height: 42px;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.98), rgba(246, 247, 249, 0.95));
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: var(--xpin-inner-highlight);
+  position: relative;
+  cursor: grab;
+  user-select: none;
+}
+
+.xpin-window-titlebar:active {
+  cursor: grabbing;
+}
+
+/* Traffic Lights (macOS exact red, yellow, green) */
+.xpin-traffic-lights {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+}
+
+.xpin-traffic-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s, filter 0.12s;
+}
+
+.xpin-traffic-dot.red {
+  background-color: var(--xpin-color-red);
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+}
+
+.xpin-traffic-dot.yellow {
+  background-color: var(--xpin-color-yellow);
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+}
+
+.xpin-traffic-dot.green {
+  background-color: var(--xpin-color-green);
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+}
+
+/* Hover symbols inside traffic lights */
+.xpin-traffic-lights:hover .xpin-traffic-dot.red::after {
+  content: '✕';
+  font-size: 8px;
+  font-weight: 800;
+  color: rgba(90, 0, 0, 0.7);
+  line-height: 1;
+}
+
+.xpin-traffic-lights:hover .xpin-traffic-dot.yellow::after {
+  content: '−';
+  font-size: 10px;
+  font-weight: 900;
+  color: rgba(90, 60, 0, 0.75);
+  line-height: 1;
+}
+
+.xpin-traffic-lights:hover .xpin-traffic-dot.green::after {
+  content: '+';
+  font-size: 10px;
+  font-weight: 800;
+  color: rgba(0, 70, 10, 0.75);
+  line-height: 1;
+}
+
+/* Inactive window traffic lights are desaturated */
+.xpin-window.inactive-window .xpin-traffic-dot {
+  background-color: #D1D5DB !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Window Title & Badges */
+.xpin-window-title-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--xpin-text-main);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.xpin-window.inactive-window .xpin-window-title-center {
+  color: var(--xpin-text-muted);
+}
+
+.xpin-window-title-badge {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--xpin-text-sub);
+}
+
+.xpin-window-body {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+/* Window Corner Resizer */
+.xpin-window-resizer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 16px;
+  height: 16px;
+  cursor: se-resize;
+  z-index: 100;
+  background: linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.2) 50%, transparent 60%, transparent 70%, rgba(0, 0, 0, 0.2) 70%);
+}
+
+/* ==========================================================================
+   Finder Window (Authentic macOS File Explorer)
+   ========================================================================== */
+.xpin-finder-window {
+  min-width: 680px;
+  min-height: 400px;
+}
+
+.xpin-finder-toolbar {
+  height: 38px;
+  background: #F7F8FA;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 12px;
+}
+
+.xpin-finder-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.xpin-finder-nav-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #6E6E73;
+  cursor: pointer;
+}
+
+.xpin-finder-view-segmented {
+  display: flex;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.xpin-finder-view-seg {
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #6E6E73;
+}
+
+.xpin-finder-view-seg.active {
+  background: #FFFFFF;
+  color: #1D1D1F;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.xpin-finder-search-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: #8E8E93;
+}
+
+/* Finder Body: Sidebar + Main File Grid */
+.xpin-finder-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.xpin-finder-sidebar {
+  width: 180px;
+  min-width: 180px;
+  background: rgba(246, 247, 249, 0.95);
+  border-right: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.xpin-sidebar-group-title {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #8E8E93;
+  padding: 0 6px 4px 6px;
+  letter-spacing: 0.5px;
+}
+
+.xpin-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.xpin-sidebar-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.xpin-sidebar-item.active {
+  background: rgba(0, 122, 255, 0.15);
+  color: #007AFF;
+  font-weight: 700;
+}
+
+.xpin-finder-content {
+  flex: 1;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.xpin-file-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 16px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.xpin-file-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+}
+
+.xpin-file-card:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.xpin-file-card.selected {
+  background: rgba(0, 122, 255, 0.12);
+  border-color: rgba(0, 122, 255, 0.4);
+}
+
+.xpin-file-thumbnail-wrap {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.xpin-file-thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.xpin-file-name {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: #1D1D1F;
+  line-height: 1.25;
+  word-break: break-all;
+}
+
+.xpin-file-size {
+  font-size: 10px;
+  color: #8E8E93;
+  margin-top: 2px;
+}
+
+.xpin-finder-statusbar {
+  height: 24px;
+  background: #F7F8FA;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 11px;
+  color: #8E8E93;
+}
+
+/* ==========================================================================
+   Preview Window (Hardware Inspector & Macro Callouts)
+   ========================================================================== */
+.xpin-preview-window {
+  min-width: 640px;
+  min-height: 460px;
+}
+
+.xpin-preview-toolbar {
+  height: 38px;
+  background: #F7F8FA;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.xpin-preview-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.xpin-preview-btn {
+  padding: 4px 10px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.xpin-preview-btn:hover {
+  background: #F3F4F6;
+}
+
+.xpin-preview-select {
+  padding: 4px 8px;
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1D1D1F;
+  outline: none;
+}
+
+.xpin-photo-viewport {
+  position: relative;
+  flex: 1;
+  background: #111317;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+}
+
+.xpin-photo-viewport:active {
+  cursor: grabbing;
+}
+
+.xpin-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center center;
+}
+
+/* Target Reticle & Callout Pins */
+.xpin-chip-target-box {
+  position: absolute;
+  border: 2px dashed var(--xpin-color-blue);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3), inset 0 0 20px rgba(81, 167, 249, 0.25);
+  border-radius: 6px;
+  pointer-events: none;
+  animation: pulse-border 2.5s infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(81, 167, 249, 0.9); }
+  50% { border-color: rgba(255, 255, 255, 0.9); }
+}
+
+.xpin-chip-callout-tag {
+  position: absolute;
+  background: rgba(17, 19, 24, 0.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(81, 167, 249, 0.45);
+  color: #FFFFFF;
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.35);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Ref-01: Safari / Browser Window (来源: www.youtube.com)
+   ========================================================================== */
+.xpin-browser-window {
+  min-width: 640px;
+  min-height: 440px;
+  background: #F4F5F7;
+}
+
+.xpin-browser-toolbar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--xpin-text-sub);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.xpin-browser-left-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.xpin-browser-back-btn {
+  color: var(--xpin-color-yellow);
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.12s;
+}
+
+.xpin-browser-back-btn:hover {
+  transform: translateX(-2px);
+}
+
+.xpin-browser-url-pill {
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #4B5563;
+  width: 380px;
+}
+
+.xpin-browser-source-tag {
+  background: #FDBC2C;
+  color: #111111;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.xpin-browser-canvas-body {
+  margin: 12px;
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.xpin-browser-video-preview {
+  height: 220px;
+  background: #000000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.xpin-browser-play-btn {
+  width: 54px;
+  height: 54px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.xpin-browser-play-btn:hover {
+  transform: scale(1.1);
+}
+
+.xpin-browser-article {
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+.xpin-browser-h1 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.xpin-browser-p {
+  font-size: 13px;
+  color: #4B5563;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Notes Window (备忘录 / Hardware Specs Sheet)
+   ========================================================================== */
+.xpin-notes-window {
+  min-width: 580px;
+  min-height: 400px;
+}
+
+.xpin-notes-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.xpin-notes-sidebar {
+  width: 170px;
+  background: #FBFBFC;
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.xpin-notes-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.xpin-notes-item.active {
+  background: #FDBC2C;
+  color: #111111;
+}
+
+.xpin-notes-item-title {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xpin-notes-item-date {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.xpin-notes-editor {
+  flex: 1;
+  background: #FFFFFF;
+  padding: 24px 28px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #1F2937;
+}
+
+.xpin-notes-editor h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.xpin-specs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 12px;
+}
+
+.xpin-specs-table th, .xpin-specs-table td {
+  border: 1px solid #E5E7EB;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.xpin-specs-table th {
+  background: #F9FAFB;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Terminal Window (终端 / Zsh Compiler)
+   ========================================================================== */
+.xpin-terminal-window {
+  min-width: 560px;
+  min-height: 340px;
+  background: #181A20 !important;
+  color: #F8FAFC !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.xpin-terminal-window .xpin-window-titlebar {
+  background: #20232A !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #E2E8F0 !important;
+}
+
+.xpin-terminal-window .xpin-window-title-center {
+  color: #94A3B8 !important;
+  font-family: var(--xpin-font-mono);
+  font-size: 12px;
+}
+
+.xpin-terminal-body {
+  padding: 16px;
+  font-family: var(--xpin-font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.terminal-prompt {
+  color: #38BDF8;
+  font-weight: 700;
+}
+
+.terminal-success {
+  color: #4ADE80;
+  font-weight: 600;
+}
+
+.terminal-accent {
+  color: #FBBF24;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background: #38BDF8;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ==========================================================================
+   Center Master Window (Ref-04 Typography & Selection)
+   ========================================================================== */
+.xpin-master-window {
+  width: 560px;
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 24px 64px -10px rgba(0, 0, 0, 0.14);
+}
+
+.xpin-master-window-body {
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.xpin-brand-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--xpin-color-red);
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+.xpin-master-headline {
+  font-family: var(--xpin-font-display);
+  font-size: 46px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: var(--xpin-text-main);
+  line-height: 1.1;
+  text-align: center;
+}
+
+.xpin-sub-badge {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4B5563;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.xpin-selection-box {
+  position: relative;
+  border: 1.5px dashed var(--xpin-color-blue);
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin: 18px 0;
+  cursor: pointer;
+}
+
+.xpin-selection-handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: var(--xpin-color-blue);
+  border: 1px solid #FFFFFF;
+  border-radius: 1px;
+}
+
+.xpin-selection-handle.tl { top: -4px; left: -4px; }
+.xpin-selection-handle.tc { top: -4px; left: 50%; transform: translateX(-50%); }
+.xpin-selection-handle.tr { top: -4px; right: -4px; }
+.xpin-selection-handle.ml { top: 50%; left: -4px; transform: translateY(-50%); }
+.xpin-selection-handle.mr { top: 50%; right: -4px; transform: translateY(-50%); }
+.xpin-selection-handle.bl { bottom: -4px; left: -4px; }
+.xpin-selection-handle.bc { bottom: -4px; left: 50%; transform: translateX(-50%); }
+.xpin-selection-handle.br { bottom: -4px; right: -4px; }
+
+.xpin-font-options {
+  width: 100%;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.xpin-font-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.xpin-radio-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1.5px solid #D1D5DB;
+}
+
+.xpin-check-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--xpin-color-yellow);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   Side Floating Cards: Line Chart, Audio, Color Palette (Ref-04)
+   ========================================================================== */
 .xpin-card {
   position: absolute;
   background: var(--xpin-surface-card);
@@ -151,48 +1104,15 @@
   box-shadow: var(--xpin-shadow-card);
   box-sizing: border-box;
   overflow: hidden;
+  cursor: grab;
+  user-select: none;
 }
 
-/* ==========================================================================
-   (01) Context Menu Popup (Ref-04 (01))
-   ========================================================================== */
-.xpin-context-menu {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  background: #FFFFFF;
-  border-radius: 10px;
-  padding: 7px 14px;
-  box-shadow: var(--xpin-shadow-popup);
-  border: 1px solid rgba(0,0,0,0.06);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--xpin-text-main);
-  gap: 10px;
-  z-index: 50;
-  pointer-events: none;
+.xpin-card:active {
+  cursor: grabbing;
 }
 
-.xpin-context-menu-divider {
-  width: 1px;
-  height: 14px;
-  background: #E5E7EB;
-}
-
-.xpin-context-menu-arrow {
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%) rotate(45deg);
-  width: 12px;
-  height: 12px;
-  background: #FFFFFF;
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.04);
-}
-
-/* ==========================================================================
-   (02) Line Chart Card (Ref-04 (02))
-   ========================================================================== */
+/* (02) Line Chart Card */
 .xpin-chart-card {
   width: 270px;
   height: 220px;
@@ -261,47 +1181,25 @@
 .xpin-chart-xaxis {
   display: flex;
   justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
   color: var(--xpin-text-muted);
-  font-size: 11px;
-  margin-top: 10px;
-  font-weight: 500;
+  margin-top: 8px;
 }
 
-/* ==========================================================================
-   (03) 3D Folder Icon (Ref-04 (03))
-   ========================================================================== */
-.xpin-3d-folder-container {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.xpin-3d-folder-svg {
-  filter: drop-shadow(0 16px 28px rgba(37, 99, 235, 0.22));
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ==========================================================================
-   (04) Audio Player Card (Ref-04 (04))
-   ========================================================================== */
+/* (04) Audio Player Card */
 .xpin-audio-card {
-  width: 290px;
-  height: 100px;
-  padding: 12px 16px;
-  border-radius: 14px;
+  width: 280px;
+  height: 150px;
+  padding: 16px 20px;
 }
 
 .xpin-audio-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .xpin-audio-title-group {
@@ -313,9 +1211,11 @@
 .xpin-audio-waveform-wrap {
   position: relative;
   width: 100%;
-  height: 44px;
+  height: 60px;
+  margin-top: 18px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .xpin-audio-waveform-bars {
@@ -328,39 +1228,36 @@
 
 .xpin-audio-bar {
   flex: 1;
-  background: #BCC1CA;
+  background: #D1D5DB;
   border-radius: 2px;
-  transition: height 0.08s ease;
+  transition: height 0.15s ease, background 0.15s ease;
 }
 
 .xpin-audio-playhead {
   position: absolute;
-  top: -8px;
+  top: -4px;
   bottom: -4px;
   width: 2px;
   background: var(--xpin-color-red);
-  transform: translateX(-50%);
   pointer-events: none;
 }
 
 .xpin-audio-playhead-pin {
   position: absolute;
-  top: 0;
+  top: -6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 10px;
-  height: 14px;
+  width: 8px;
+  height: 12px;
   background: var(--xpin-color-red);
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
-/* ==========================================================================
-   (05) Color Palette Card (Ref-04 (05))
-   ========================================================================== */
+/* (05) Color Palette Card */
 .xpin-color-card {
-  width: 210px;
-  padding: 16px 18px;
-  border-radius: 16px;
+  width: 200px;
+  height: 250px;
+  padding: 16px 20px;
 }
 
 .xpin-color-header {
@@ -379,272 +1276,34 @@
 .xpin-color-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
   margin-bottom: 10px;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background 0.12s;
+}
+
+.xpin-color-row:hover {
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .xpin-color-chip {
-  width: 44px;
-  height: 18px;
-  border-radius: 4px;
+  width: 48px;
+  height: 22px;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 
 .xpin-color-code {
   font-family: var(--xpin-font-mono);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--xpin-text-main);
-}
-
-/* ==========================================================================
-   (06) Dock Search Pill & Guides (Ref-04 (06))
-   ========================================================================== */
-.xpin-dock-search-wrap {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.xpin-dock-search-pill {
-  height: 48px;
-  background: #FFFFFF;
-  border-radius: 9999px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  gap: 14px;
-  width: 380px;
-}
-
-.xpin-dock-search-input {
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 15px;
-  font-weight: 500;
-  color: var(--xpin-text-main);
-  flex: 1;
-}
-
-.xpin-dock-search-input::placeholder {
-  color: #9CA3AF;
-}
-
-.xpin-dock-guide-box {
-  position: absolute;
-  inset: -14px -14px -14px -14px;
-  border: 1px solid var(--xpin-color-guide);
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.xpin-dock-guide-marker {
-  position: absolute;
-  width: 1px;
-  height: 16px;
-  background: var(--xpin-color-guide);
-}
-
-/* ==========================================================================
-   Center Master Window (Ref-04 Center)
-   ========================================================================== */
-.xpin-master-window {
-  position: absolute;
-  width: 440px;
-  min-height: 520px;
-  border-radius: 20px;
-  background: #FFFFFF;
-  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.12), 0 4px 18px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  overflow: visible;
-}
-
-.xpin-window-titlebar {
-  height: 48px;
-  display: flex;
-  align-items: center;
-  padding: 0 18px;
-  position: relative;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.xpin-traffic-lights {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.xpin-traffic-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.xpin-traffic-dot.red { background: var(--xpin-color-red); }
-.xpin-traffic-dot.yellow { background: var(--xpin-color-yellow); }
-.xpin-traffic-dot.green { background: var(--xpin-color-green); }
-
-.xpin-window-title-badge {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  font-size: 12px;
   font-weight: 700;
-  font-size: 14px;
   color: var(--xpin-text-sub);
 }
 
-.xpin-master-window-body {
-  padding: 30px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.xpin-brand-title {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--xpin-color-red);
-  letter-spacing: 2px;
-  margin-bottom: 4px;
-}
-
-.xpin-master-headline {
-  font-family: var(--xpin-font-display);
-  font-size: 46px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  color: var(--xpin-text-main);
-  line-height: 1.1;
-  text-align: center;
-}
-
-.xpin-sub-badge {
-  font-size: 13px;
-  font-weight: 700;
-  color: #4B5563;
-  margin-top: 6px;
-  letter-spacing: 0.5px;
-}
-
-/* Blue Interactive Selection Box with 8 Handles */
-.xpin-selection-box {
-  position: relative;
-  border: 1.5px dashed var(--xpin-color-blue);
-  padding: 10px 18px;
-  border-radius: 4px;
-  margin: 18px 0;
-  cursor: pointer;
-}
-
-.xpin-selection-handle {
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  background: var(--xpin-color-blue);
-  border: 1px solid #FFFFFF;
-  border-radius: 1px;
-}
-
-.xpin-selection-handle.tl { top: -4px; left: -4px; }
-.xpin-selection-handle.tc { top: -4px; left: 50%; transform: translateX(-50%); }
-.xpin-selection-handle.tr { top: -4px; right: -4px; }
-.xpin-selection-handle.ml { top: 50%; left: -4px; transform: translateY(-50%); }
-.xpin-selection-handle.mr { top: 50%; right: -4px; transform: translateY(-50%); }
-.xpin-selection-handle.bl { bottom: -4px; left: -4px; }
-.xpin-selection-handle.bc { bottom: -4px; left: 50%; transform: translateX(-50%); }
-.xpin-selection-handle.br { bottom: -4px; right: -4px; }
-
-/* Font Switch Rows */
-.xpin-font-options {
-  width: 100%;
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.xpin-font-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.xpin-radio-icon {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 1.5px solid #D1D5DB;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.xpin-check-icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--xpin-color-yellow);
-  color: #FFFFFF;
-  font-size: 11px;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 /* ==========================================================================
-   Ref-01: Browser Window (来源: www.youtube.com)
-   ========================================================================== */
-.xpin-browser-window {
-  width: 820px;
-  height: 520px;
-  border-radius: 20px;
-  background: #F4F5F7;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.1);
-  border: 1px solid rgba(0,0,0,0.06);
-}
-
-.xpin-browser-toolbar {
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 18px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--xpin-text-sub);
-}
-
-.xpin-browser-left-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.xpin-browser-back-btn {
-  color: var(--xpin-color-yellow);
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.xpin-browser-canvas-body {
-  margin: 0 14px 14px 14px;
-  height: calc(100% - 58px);
-  background: #ECEEF1;
-  border-radius: 14px;
-  border: 1px solid rgba(0,0,0,0.04);
-  position: relative;
-  overflow: hidden;
-}
-
-/* ==========================================================================
-   Ref-02: Arc Chapter Selector (Part 01-04)
+   Ref-02: Arc Chapter Selector
    ========================================================================== */
 .xpin-arc-chapter-wrap {
   position: absolute;
@@ -653,6 +1312,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  z-index: 15;
 }
 
 .xpin-arc-parts-row {
@@ -668,7 +1328,7 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  opacity: 0.28;
+  opacity: 0.35;
   transition: opacity 0.25s, transform 0.25s;
 }
 
@@ -699,26 +1359,6 @@
   line-height: 1;
 }
 
-.xpin-arc-center-content {
-  margin-top: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.xpin-arc-traffic-pills {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 18px;
-}
-
-.xpin-arc-chapter-title {
-  font-family: var(--xpin-font-display);
-  font-size: 38px;
-  font-weight: 900;
-  letter-spacing: 2px;
-}
-
 /* ==========================================================================
    Ref-03: Quote Bubble & 3D Icons
    ========================================================================== */
@@ -729,6 +1369,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 25;
 }
 
 .xpin-quote-badge {
@@ -749,141 +1390,270 @@
 
 .xpin-quote-bubble {
   position: relative;
-  background: #4BA2F6;
-  border-radius: 36px;
-  padding: 44px 56px;
+  background: var(--xpin-color-blue);
+  width: 480px;
+  min-height: 180px;
+  border-radius: 32px;
+  padding: 34px 44px;
+  box-shadow: 0 25px 60px rgba(81, 167, 249, 0.4);
   color: #FFFFFF;
-  max-width: 540px;
-  box-shadow: 0 24px 60px rgba(59, 130, 246, 0.35);
+  box-sizing: border-box;
 }
 
 .xpin-quote-bubble-title {
   font-family: var(--xpin-font-display);
-  font-size: 48px;
+  font-size: 32px;
   font-weight: 900;
   margin-bottom: 12px;
-  letter-spacing: 1px;
 }
 
 .xpin-quote-bubble-text {
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 700;
   line-height: 1.6;
-  opacity: 0.95;
 }
 
 .xpin-quote-mark {
   position: absolute;
-  font-family: Georgia, serif;
-  font-size: 96px;
+  font-family: serif;
+  font-size: 72px;
   line-height: 1;
-  color: #388EE6;
-  pointer-events: none;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.xpin-quote-mark.left { top: -20px; left: -36px; }
-.xpin-quote-mark.right { bottom: -40px; right: -28px; }
+.xpin-quote-mark.left { top: -20px; left: -10px; }
+.xpin-quote-mark.right { bottom: -40px; right: 10px; }
 
-/* 3D App Icons (Wi-Fi, iCloud, Messages) */
 .xpin-3d-floating-icon {
   position: absolute;
+  background: #FFFFFF;
+  border-radius: 20px;
   width: 72px;
   height: 72px;
-  border-radius: 20px;
-  background: linear-gradient(145deg, #FFFFFF, #E6E8EC);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.15), inset 0 2px 4px rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.05);
+  animation: float 4s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-10px) rotate(4deg); }
 }
 
 /* ==========================================================================
-   Photo Viewer Window (Hardware Demo: SoC Zoom)
+   Authentic macOS Dock (Bottom Floating Pill)
    ========================================================================== */
-.xpin-photo-window {
+.xpin-dock-wrapper {
   position: absolute;
-  width: 760px;
-  height: 480px;
-  border-radius: 18px;
-  background: #FFFFFF;
-  box-shadow: 0 35px 80px -10px rgba(0, 0, 0, 0.18), 0 6px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid var(--xpin-surface-border);
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 900;
+}
+
+.xpin-dock-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--xpin-shadow-dock);
+}
+
+.xpin-dock-item {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xpin-dock-item:hover {
+  transform: scale(1.18) translateY(-6px);
+}
+
+.xpin-dock-item:active {
+  transform: scale(1.05) translateY(-2px);
+}
+
+.xpin-dock-item svg, .xpin-dock-item img {
+  width: 42px;
+  height: 42px;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+}
+
+.xpin-dock-divider {
+  width: 1px;
+  height: 38px;
+  background: rgba(0, 0, 0, 0.12);
+  margin: 0 4px;
+}
+
+/* Running App Indicator Dot under dock icon */
+.xpin-dock-item.app-running::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background: #374151;
+  border-radius: 50%;
+}
+
+.xpin-dock-item.app-active::after {
+  background: #007AFF;
+  width: 5px;
+  height: 5px;
+  box-shadow: 0 0 6px rgba(0, 122, 255, 0.6);
+}
+
+/* ==========================================================================
+   Spotlight Search Modal (Cmd+Space / 聚焦搜索)
+   ========================================================================== */
+.xpin-spotlight-overlay {
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 620px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28), 0 4px 16px rgba(0, 0, 0, 0.08);
+  z-index: 2000;
+  display: none;
   overflow: hidden;
+}
+
+.xpin-spotlight-overlay.open {
+  display: block;
+  animation: spotlight-enter 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes spotlight-enter {
+  from { opacity: 0; transform: translate(-50%, -10px) scale(0.96); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+.xpin-spotlight-header {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 0 18px;
+  gap: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.xpin-spotlight-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1D1D1F;
+  outline: none;
+}
+
+.xpin-spotlight-results {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.xpin-spotlight-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.xpin-spotlight-item:hover, .xpin-spotlight-item.selected {
+  background: #007AFF;
+  color: #FFFFFF;
+}
+
+.xpin-spotlight-item:hover .xpin-spotlight-sub, .xpin-spotlight-item.selected .xpin-spotlight-sub {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.xpin-spotlight-title {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.xpin-spotlight-sub {
+  font-size: 11px;
+  color: #8E8E93;
+}
+
+/* ==========================================================================
+   Control Center Panel (控制中心)
+   ========================================================================== */
+.xpin-control-center-panel {
+  position: absolute;
+  top: 36px;
+  right: 14px;
+  width: 320px;
+  background: rgba(246, 247, 249, 0.92);
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16);
+  padding: 14px;
+  display: none;
+  z-index: 1002;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.xpin-control-center-panel.open {
+  display: flex;
+}
+
+.xpin-cc-tile {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.xpin-cc-slider-row {
   display: flex;
   flex-direction: column;
-  z-index: 60;
+  gap: 4px;
 }
 
-/* Headless Full-bleed Mode for pristine 1080p video export */
-body.mode-headless .studio-header,
-body.mode-headless .sidebar-left,
-body.mode-headless .sidebar-right,
-body.mode-headless .studio-timeline-panel {
-  display: none !important;
+.xpin-cc-slider-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6E6E73;
 }
 
-body.mode-headless .stage-outer-wrapper {
-  background: transparent !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  position: fixed !important;
-  inset: 0 !important;
-  width: 1920px !important;
-  height: 1080px !important;
-}
-
-body.mode-headless #xpin-stage-container {
-  transform: none !important;
-  width: 1920px !important;
-  height: 1080px !important;
-  box-shadow: none !important;
-  border-radius: 0 !important;
-}
-
-.xpin-photo-viewport {
-  position: relative;
-  flex: 1;
-  overflow: hidden;
-  background: #111318;
-}
-
-.xpin-photo-img {
-  position: absolute;
-  top: 0;
-  left: 0;
+.xpin-cc-range {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform-origin: 0 0;
-}
-
-/* Highlight Region / Annotation Tag */
-.xpin-chip-target-box {
-  position: absolute;
-  border: 2px solid var(--xpin-color-blue);
-  background: rgba(81, 167, 249, 0.15);
-  border-radius: 6px;
-  pointer-events: none;
-  box-shadow: 0 0 24px rgba(81, 167, 249, 0.6);
-}
-
-.xpin-chip-callout-tag {
-  position: absolute;
-  background: rgba(17, 19, 24, 0.88);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(81, 167, 249, 0.4);
-  color: #FFFFFF;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  pointer-events: none;
-  white-space: nowrap;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.3);
+  accent-color: #007AFF;
 }
 
 /* ==========================================================================
-   Cursor & Interaction Performance
+   Cursor & Click Feedback
    ========================================================================== */
 .xpin-cursor {
   position: absolute;
@@ -892,7 +1662,7 @@ body.mode-headless #xpin-stage-container {
   width: 24px;
   height: 24px;
   pointer-events: none;
-  z-index: 999;
+  z-index: 3000;
   transform: translate(-2px, -2px);
   filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
 }
@@ -907,5 +1677,32 @@ body.mode-headless #xpin-stage-container {
   background: rgba(81, 167, 249, 0.4);
   transform: translate(-50%, -50%) scale(0);
   pointer-events: none;
-  z-index: 998;
+  z-index: 2999;
+}
+
+/* ==========================================================================
+   Toast Notification Banner
+   ========================================================================== */
+.xpin-toast {
+  position: absolute;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(17, 19, 24, 0.88);
+  backdrop-filter: blur(14px);
+  color: #FFFFFF;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+  z-index: 2500;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.xpin-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

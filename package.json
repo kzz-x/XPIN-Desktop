@@ -1,12 +1,13 @@
 {
   "name": "xpin-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cinematic UI Motion Engine · Agent-native UI animation and video system",
   "main": "src/main.js",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:standalone": "node scripts/build_standalone.js",
     "preview": "vite preview",
     "render:video": "python scripts/render_video.py"
   },
