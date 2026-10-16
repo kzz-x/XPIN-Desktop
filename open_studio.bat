@@ -1,0 +1,3 @@
+@echo off
+echo Opening XPIN-Desktop Studio...
+start "" "%~dp0index.html"
